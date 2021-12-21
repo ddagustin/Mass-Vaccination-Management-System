@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="415.0" maxWidth="380.0" minHeight="393.0" minWidth="380.0" prefHeight="393.0" prefWidth="380.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvss.controllers.LoginController">
+   <children>
+      <VBox alignment="CENTER" maxHeight="415.0" maxWidth="380.0" minHeight="415.0" minWidth="380.0" prefHeight="415.0" prefWidth="380.0" scaleShape="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox fx:id="logLogoHBox" alignment="CENTER" minHeight="215.0">
+               <children>
+                  <ImageView fx:id="logLogoImg" fitHeight="185.0" fitWidth="139.0" nodeOrientation="INHERIT" preserveRatio="true">
+                     <image>
+                        <Image url="@png/qld.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" minHeight="180.0" prefHeight="180.0" prefWidth="380.0">
+               <children>
+                  <Pane prefHeight="169.0" prefWidth="238.0">
+                     <children>
+                        <Label layoutX="4.0" prefHeight="25.0" prefWidth="85.0" text="Username" />
+                        <TextField fx:id="username" layoutX="89.0" onKeyPressed="#onEnter" prefHeight="25.0" prefWidth="150.0" promptText="username">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets></TextField>
+                        <Label layoutX="4.0" layoutY="45.0" prefHeight="25.0" prefWidth="85.0" text="Password" />
+                        <PasswordField fx:id="password" layoutX="89.0" layoutY="45.0" onKeyPressed="#onEnter" prefHeight="25.0" prefWidth="150.0" promptText="password" />
+                        <Button layoutY="90.0" mnemonicParsing="false" onAction="#buttonLogin" prefHeight="25.0" prefWidth="238.0" text="Log In" />
+                        <Hyperlink fx:id="linkRegistration" alignment="CENTER_RIGHT" layoutX="110.0" layoutY="135.0" onAction="#processRegistration" prefHeight="25.0" prefWidth="128.0" text="New Staff? Register" textAlignment="CENTER" />
+                     </children>
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </Pane>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

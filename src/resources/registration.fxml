@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="790.0" prefWidth="440.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvss.controllers.RegistrationController">
+   <children>
+      <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox fx:id="regLogoHBox" alignment="CENTER" minHeight="215.0" styleClass="background">
+               <children>
+                  <ImageView fx:id="regLogoImg" fitHeight="185.0" fitWidth="139.0" nodeOrientation="INHERIT" preserveRatio="true">
+                     <image>
+                        <Image url="@png/qld.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+            <Separator prefWidth="400.0" VBox.vgrow="NEVER">
+               <padding>
+                  <Insets left="100.0" right="100.0" />
+               </padding>
+            </Separator>
+            <HBox alignment="CENTER">
+               <children>
+                  <Pane>
+                     <children>
+                        <Label layoutX="72.0" text="New User Registration">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="firstName" layoutY="45.0" prefHeight="25.0" prefWidth="150.0" promptText="first name" />
+                        <TextField fx:id="lastName" layoutX="170.0" layoutY="45.0" prefHeight="25.0" prefWidth="150.0" promptText="last name" />
+                        <TextField fx:id="streetAddress" layoutY="85.0" prefHeight="25.0" prefWidth="320.0" promptText="street address" />
+                        <TextField fx:id="suburb" layoutY="125.0" prefHeight="25.0" prefWidth="150.0" promptText="suburb" />
+                        <TextField fx:id="state" layoutX="170.0" layoutY="125.0" prefHeight="25.0" prefWidth="150.0" promptText="state" />
+                        <ComboBox fx:id="chooseStaffType" layoutY="185.0" onAction="#onSelectStaffType" prefHeight="30.0" prefWidth="320.0" promptText="Select Staff Type" />
+                        <ComboBox fx:id="choosePositionType" layoutY="230.0" prefHeight="30.0" prefWidth="320.0" promptText="Select Position Type" />
+                        <Pane fx:id="medicalPane" layoutY="275.0">
+                           <children>
+                              <TextField fx:id="registrationID" prefHeight="25.0" prefWidth="320.0" promptText="registration id" />
+                              <TextField fx:id="affiliation" layoutY="40.0" prefHeight="25.0" prefWidth="320.0" promptText="affiliation" />
+                              <TextField fx:id="category" layoutY="80.0" prefHeight="25.0" prefWidth="320.0" promptText="category" />
+                           </children>
+                        </Pane>
+                        <Pane fx:id="contactPane" layoutY="395.0">
+                           <children>
+                              <TextField fx:id="emailAddress" layoutY="25.0" prefHeight="25.0" prefWidth="320.0" promptText="email address" />
+                              <TextField fx:id="phoneNumber" layoutY="65.0" prefHeight="25.0" prefWidth="320.0" promptText="phone number" />
+                              <TextField fx:id="username" layoutY="105.0" prefHeight="25.0" prefWidth="320.0" promptText="username" />
+                              <TextField fx:id="password" layoutY="145.0" prefHeight="25.0" prefWidth="320.0" promptText="password" />
+                              <Button layoutY="225.0" mnemonicParsing="false" onAction="#registerStaff" prefHeight="25.0" prefWidth="320.0" text="Register" />
+                              <Button layoutY="265.0" mnemonicParsing="false" onAction="#processGoBack" prefHeight="25.0" prefWidth="320.0" styleClass="button-obscure" text="&lt; Go Back" />
+                              <Separator layoutX="60.0" layoutY="5.0" prefWidth="200.0" />
+                              <TextField fx:id="confirmPassword" layoutY="185.0" prefHeight="25.0" prefWidth="320.0" promptText="confirm password" />
+                           </children>
+                        </Pane>
+                        <Separator layoutX="60.0" layoutY="165.0" prefWidth="200.0" />
+                     </children>
+                  </Pane>
+               </children>
+               <padding>
+                  <Insets top="20.0" />
+               </padding>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="25.0" top="5.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>
