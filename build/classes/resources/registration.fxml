@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -34,7 +35,7 @@
             </Separator>
             <HBox alignment="CENTER">
                <children>
-                  <Pane>
+                  <Pane fx:id="detailsPane">
                      <children>
                         <Label layoutX="72.0" text="New User Registration">
                            <font>
@@ -60,8 +61,8 @@
                               <TextField fx:id="emailAddress" layoutY="25.0" prefHeight="25.0" prefWidth="320.0" promptText="email address" />
                               <TextField fx:id="phoneNumber" layoutY="65.0" prefHeight="25.0" prefWidth="320.0" promptText="phone number" />
                               <TextField fx:id="username" layoutY="105.0" prefHeight="25.0" prefWidth="320.0" promptText="username" />
-                              <TextField fx:id="password" layoutY="145.0" prefHeight="25.0" prefWidth="320.0" promptText="password" />
-                              <TextField fx:id="confirmPassword" layoutY="185.0" prefHeight="25.0" prefWidth="320.0" promptText="confirm password" />
+                              <PasswordField fx:id="password" layoutY="145.0" prefHeight="25.0" prefWidth="320.0" promptText="password" />
+                              <PasswordField fx:id="confirmPassword" layoutY="185.0" prefHeight="25.0" prefWidth="320.0" promptText="confirm password" />
                               <Button layoutY="225.0" mnemonicParsing="false" onAction="#registerStaff" prefHeight="25.0" prefWidth="320.0" text="Register" />
                               <Button layoutY="265.0" mnemonicParsing="false" onAction="#processGoBack" prefHeight="25.0" prefWidth="320.0" styleClass="button-obscure" text="&lt; Go Back" />
                               <Separator layoutX="60.0" layoutY="5.0" prefWidth="200.0" />

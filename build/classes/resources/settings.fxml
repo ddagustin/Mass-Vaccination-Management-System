@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvms.controllers.mainwindow.SettingsController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvms.controllers.SettingsController">
    <children>
-      <Pane layoutX="20.0" layoutY="10.0" prefHeight="240.0" prefWidth="320.0">
+      <Pane fx:id="detailsPane" layoutX="20.0" layoutY="10.0" prefHeight="240.0" prefWidth="320.0">
          <children>
             <Label text="Staff Information">
                <font>
@@ -31,7 +31,7 @@
             <Button fx:id="buttonCancelDetailChanges" disable="true" layoutY="295.0" mnemonicParsing="false" onAction="#cancelDetailChanges" prefHeight="25.0" prefWidth="320.0" styleClass="button-obscure" text="Cancel Changes" />
          </children>
       </Pane>
-      <Pane layoutX="20.0" layoutY="350.0" prefHeight="230.0" prefWidth="320.0">
+      <Pane fx:id="passwordPane" layoutX="20.0" layoutY="350.0" prefHeight="230.0" prefWidth="320.0">
          <children>
             <Label text="Account Information">
                <font>

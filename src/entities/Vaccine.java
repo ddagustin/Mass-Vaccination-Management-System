@@ -1,4 +1,4 @@
-package vacc;
+package entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -14,6 +14,8 @@ public class Vaccine implements Serializable
     private LocalDate vaccinationDate;
     private String vaccineID;
     private VaccineType vaccineName;
+    private boolean status = false;
+    private String administeredBy = "";
     
     public enum VaccineType {
         None, AstraZeneca, Pfizer, Moderna
@@ -40,6 +42,19 @@ public class Vaccine implements Serializable
         this.vaccineID = ( vaccineName.substring(0,1) + UUID.randomUUID().toString().substring(0,8) ).toUpperCase();
     }
     
+    public Vaccine( String vaccineName, LocalDate vaccinationDate ) {
+        
+        try {
+            this.vaccineName = VaccineType.valueOf( vaccineName );
+        }
+        catch( IllegalArgumentException ex ) {
+            this.vaccineName = VaccineType.None;
+        }
+        
+        this.vaccinationDate = vaccinationDate;
+        this.vaccineID = ( vaccineName.substring(0,1) + UUID.randomUUID().toString().substring(0,8) ).toUpperCase();
+    }
+    
     public Vaccine()
     {
         this( VaccineType.None, LocalDate.now() );
@@ -55,10 +70,20 @@ public class Vaccine implements Serializable
     {
         return vaccineID;
     }
-
+    
     public VaccineType getVaccineName()
     {
         return vaccineName;
+    }
+    
+    public boolean getStatus()
+    {
+        return status;
+    }
+    
+    public String getAdministeredBy()
+    {
+        return administeredBy;
     }
 
     public void setVaccinationDate(LocalDate vaccinationDate)
@@ -84,6 +109,24 @@ public class Vaccine implements Serializable
         catch( IllegalArgumentException ex ) {
             // do nothing
         }
+    }
+    
+    public void setConfirmed()
+    {
+        if( status == false )
+            this.status = true;
+        else
+            System.out.println( "Vaccine already confirmed" );
+    }
+    
+    public void setAdministeredBy( String administeredBy )
+    {
+        if( status == false ) {
+            this.administeredBy = administeredBy;
+            System.out.println( administeredBy );
+        }
+        else
+            System.out.println( "Dose already administered" );
     }
     
     @Override

@@ -1,5 +1,7 @@
 package mvms.controllers;
 
+import entities.AdminStaff;
+import entities.MedicalStaff;
 import mvms.Authenticator;
 import mvms.Main;
 import java.net.URL;
@@ -7,11 +9,10 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
-import person.*;
+import mvms.Operations;
 
 /**
  * FXML Controller class
@@ -34,6 +35,9 @@ public class RegistrationController implements Initializable
 
     @FXML
     private Pane medicalPane;
+    
+    @FXML
+    private Pane detailsPane;
     
     @FXML
     private TextField affiliation;
@@ -142,7 +146,9 @@ public class RegistrationController implements Initializable
     private void addStaff() {
         selectedStaffType = chooseStaffType.getSelectionModel().getSelectedItem();
         
-        if( checkFields() ) {
+        try {
+            checkFields();
+            System.out.println( "true" );
             Authenticator.loadCredentials( username.getText(), password.getText() );
             switch( selectedStaffType ) {
                 case "Administrative Staff" 
@@ -154,39 +160,55 @@ public class RegistrationController implements Initializable
                                     username.getText(), password.getText(), streetAddress.getText(), suburb.getText(), state.getText(),
                                     registrationID.getText(), affiliation.getText(), category.getText() ));
             }
+            
+            registrationSuccess();
         }
-        else
+        catch( IllegalArgumentException ex ) {
             registrationError();
+        }
     }
     
-    private boolean checkFields()
+    private void checkFields()
     {
         selectedStaffType = chooseStaffType.getSelectionModel().getSelectedItem();
         
-        if( selectedStaffType == null )
-            return false;
-        
-        if( !firstName.getText().isBlank() && !lastName.getText().isBlank() && !phoneNumber.getText().isBlank() && !emailAddress.getText().isBlank() &&
-            !username.getText().isBlank() && !password.getText().isBlank() && !streetAddress.getText().isBlank() && !suburb.getText().isBlank() && !state.getText().isBlank() &&
-            phoneNumber.getText().matches("^\\d{10}$") && password.getText().matches( "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{10,}$" ) && password.getText().equals(confirmPassword.getText()) )
-        {
-            if( selectedStaffType.equals( "Administrative Staff" )){
-                if( choosePositionType.getSelectionModel().getSelectedItem() != null )
-                    return true;
-            }
-            else{
-                if( !registrationID.getText().isBlank() & !affiliation.getText().isBlank() & !category.getText().isBlank() )
-                    return true;
+        if( selectedStaffType != null ) {
+            if( Operations.validateFields( detailsPane ) ) {
+                if( !firstName.getText().matches(".*\\d.*") && !lastName.getText().matches(".*\\d.*") && phoneNumber.getText().matches( "^\\d{10}$" ) && emailAddress.getText().matches( "^(.+)@(.+)$" ) ) {
+                    if( !Authenticator.usernameExists( username.getText() ) ) {
+                        if( password.getText().equals( confirmPassword.getText() ) ) {
+                            if( selectedStaffType.equals( "Administrative Staff" )){
+                                if( choosePositionType.getSelectionModel().getSelectedItem() != null )
+                                    return;
+                            }
+                            else{
+                                if( Operations.validateFields( medicalPane ) )
+                                    return;
+                            }
+                        }
+                    }
+                }
             }
         }
-        return false;
+        
+        throw new IllegalArgumentException( "One of the input fields have an invalid argument." );
     }
     
     private void registrationError() {
         Alert alert = new Alert( Alert.AlertType.WARNING );
-        alert.setTitle( "Some fields are blank" );
-        alert.setHeaderText( "Some fields are blank" );
-        alert.setContentText( "Please check if all required fields are entered." );
+        alert.setTitle( "Some fields have invalid inputs" );
+        alert.setHeaderText( "Problem with fields" );
+        alert.setContentText( "Please check if all required fields are entered correctly." );
         alert.showAndWait();
+    }
+    
+    private void registrationSuccess() {
+        Alert alert = new Alert( Alert.AlertType.INFORMATION );
+        alert.setTitle( "Registration Success" );
+        alert.setHeaderText( username.getText() + " successfully registered" );
+        alert.setContentText( "Please go back to the login page by clicking 'ok'.\nIf you need to add another user, please register again." );
+        alert.showAndWait();
+        
+        application.gotoLogin();
     }
 }

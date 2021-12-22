@@ -1,6 +1,8 @@
-package mvms.controllers.mainwindow;
+package mvms.controllers;
 
-import mvms.controllers.MainController;
+import entities.MedicalStaff;
+import entities.AdminStaff;
+import entities.Staff;
 import mvms.Authenticator;
 import mvms.Main;
 import java.net.URL;
@@ -14,7 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import person.*;
+import mvms.Operations;
 
 /**
  * FXML Controller class
@@ -74,6 +76,12 @@ public class SettingsController implements Initializable
     
     @FXML
     private Pane medicalPane;
+    
+    @FXML
+    private Pane detailsPane;
+    
+    @FXML
+    private Pane passwordPane;
     
     @FXML
     private Label staffID;
@@ -138,7 +146,8 @@ public class SettingsController implements Initializable
         }
         else
         {
-            if( userStringCheck() ) {
+            try {
+                userStringCheck();
                 currentUser.setFirstName( firstName.getText() );
                 currentUser.setLastName( lastName.getText() );
                 currentUser.setPhoneNumber( phoneNumber.getText() );
@@ -152,7 +161,7 @@ public class SettingsController implements Initializable
                 setUserDetails( currentUser, false );
                 buttonChangeDetails.setText( "Update Details" );
             }
-            else {
+            catch( IllegalArgumentException ex ) {
                 showError();
             }
         }
@@ -168,8 +177,8 @@ public class SettingsController implements Initializable
             buttonChangePassword.setText( "Save Account Details" );
         }
         else {
-            if( passwordStringCheck() )
-            {
+            try {
+                passwordStringCheck();
                 Authenticator.removeCredentials(currentUser);
                 
                 currentUser.setUsername( username.getText() );
@@ -182,7 +191,7 @@ public class SettingsController implements Initializable
                 setUsername( currentUser, false );
                 buttonChangePassword.setText( "Change Password" );
             }
-            else
+            catch( IllegalArgumentException ex )
             {
                 showError();
             }
@@ -243,26 +252,23 @@ public class SettingsController implements Initializable
         buttonCancelPasswordChanges.setDisable(!mode);
     }
     
-    private boolean userStringCheck()
+    private void userStringCheck()
     {
-        return !firstName.getText().matches( ".*\\d.*" ) &&
-                !lastName.getText().matches( ".*\\d.*" ) &&
-                phoneNumber.getText().matches("^\\d{10}$") &&
-                
-                !firstName.getText().isBlank() &&
-                !lastName.getText().isBlank() &&
-                !streetAddress.getText().isBlank() &&
-                !suburb.getText().isBlank() &&
-                !state.getText().isBlank() &&
-                !emailAddress.getText().isBlank() &&
-                !phoneNumber.getText().isBlank();
+        if( Operations.validateFields( detailsPane ) ) {    
+            if( !firstName.getText().matches(".*\\d.*") && !lastName.getText().matches(".*\\d.*") && phoneNumber.getText().matches( "^\\d{10}$" ) && emailAddress.getText().matches( "^(.+)@(.+)$" ) ) {
+                return;
+            }
+        }
+        throw new IllegalArgumentException( "One of the input fields have an invalid argument." );
     }
     
-    private boolean passwordStringCheck()
+    private void passwordStringCheck()
     {
-        return password.getText().matches( "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{10,}$" ) &&
-                password.getText().equals(confirmPassword.getText()) &&
-                !username.getText().isBlank();
+        if( Operations.validateFields( passwordPane ) ) {
+            if( password.getText().equals(confirmPassword.getText()) )
+                return;
+        }
+        throw new IllegalArgumentException( "One of the input fields have an invalid argument." );
     }
     
     private static void showError() {

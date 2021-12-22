@@ -1,8 +1,8 @@
 package mvms;
 
+import entities.Staff;
 import java.util.HashMap;
 import java.util.Map;
-import person.*;
 
 /**
  * Assessment 1: Mass Vaccination System
@@ -27,6 +27,12 @@ public class Authenticator
     {
         String validUsername = CREDENTIALS.get(username);
         return validUsername != null && validUsername.equals(password);
+    }
+    
+    public static boolean usernameExists( String username )
+    {
+        String validUsername = CREDENTIALS.get(username);
+        return validUsername != null;
     }
     
     public static void removeCredentials( Staff staff )

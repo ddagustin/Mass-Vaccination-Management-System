@@ -1,5 +1,6 @@
 package mvms;
 
+import entities.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,12 +10,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
-import person.*;
 
 /**
  * Assessment 1: Mass Vaccination System
@@ -146,14 +148,16 @@ public class Operations
         return null;
     }
     
-    public boolean checkFields( Pane pane )
+    public static boolean validateFields( Pane pane )
     {
         String input;
         for( Node node : pane.getChildren() ) {
             if( node instanceof TextField ) {
                 input = ((TextField) node).getText();
-                if( input.isBlank() )
+                if( input.isBlank() ) {
+                    System.out.println( "textfield is blank" );
                     return false;
+                }
             }
             else if( node instanceof PasswordField ) {
                 input = ((PasswordField) node).getText();
@@ -161,12 +165,25 @@ public class Operations
                     return false;
             }
             else if( node instanceof ComboBox ) {
-                if( ((ComboBox) node).getSelectionModel().isEmpty() )
+                if( ((ComboBox) node).getSelectionModel().isEmpty() ) {
+                    System.out.println( "combobox is blank" );
                     return false;
+                }
             }
             else if( node instanceof DatePicker ) {
-                if( ((DatePicker) node).getValue() == null )
+                DatePicker dp = (DatePicker) node;
+                DateTimeFormatter df = DateTimeFormatter.ofPattern("d/M/yyyy");
+                if( dp.getEditor().getText().isBlank() ) {
+                    System.out.println( "is blank" );
                     return false;
+                }
+                else {
+                    dp.setValue ( LocalDate.parse(dp.getEditor().getText(), df) );
+                    if( dp.getValue() == null ) {
+                        System.out.println( "is null" );
+                        return false;
+                    }
+                }
             }
         }
         return true;

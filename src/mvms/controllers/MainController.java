@@ -4,8 +4,6 @@
  */
 package mvms.controllers;
 
-import mvms.controllers.mainwindow.SettingsController;
-import mvms.controllers.mainwindow.RecipientController;
 import mvms.Main;
 import java.net.URL;
 import java.util.ResourceBundle;

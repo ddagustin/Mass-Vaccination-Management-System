@@ -1,4 +1,4 @@
-package person;
+package entities;
 
 /**
  * Assessment 1: Mass Vaccination System

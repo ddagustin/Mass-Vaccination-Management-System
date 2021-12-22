@@ -1,5 +1,6 @@
 package mvms;
 
+import entities.*;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,7 +18,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import mvms.controllers.*;
-import person.*;
 
 /**
  * Assessment 1: Mass Vaccination System
@@ -34,10 +34,6 @@ public class Main extends Application
     
     public static void main( String[] args ) throws IOException
     {
-        initLists();
-        //staff.add( new AdminStaff( "unspecified", "unspecified", "unspecified", "unspecified", "adminstaff", "password", "unspecified", "unspecified", "unspecified", "unspecified" ));
-        //staff.add( new MedicalStaff( "unspecified", "unspecified", "unspecified", "unspecified", "medicalstaff", "password", "unspecified", "unspecified", "unspecified", "unspecified", "unspecified", "unspecified" ));
-        
         //vaccRecipient.add( new VaccineRecipient( "unspecified", "unspecified", "unspecified", "unspecified", LocalDate.of(2021,05,29), "unspecified" ) );
         
         // launch app
@@ -88,12 +84,6 @@ public class Main extends Application
         }
         */
         
-        for( Staff s : staff)
-        {
-            System.out.println(s);
-        }
-        
-
         // save arraylists to csv file before end of program
         Operations.saveFile( staff, "staff.csv" );
         Operations.saveFile( vaccRecipient, "vacc.csv" );
@@ -111,8 +101,12 @@ public class Main extends Application
             stage = primaryStage;
             stage.getIcons().add(new Image("/resources/png/qld icon.png"));
             stage.setTitle("Login - MVMS");
+            initLists();
+            
             gotoLogin();
             stage.show();
+            
+            
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -131,7 +125,7 @@ public class Main extends Application
         try {
             MainController main = (MainController) replaceSceneContent("/resources/main.fxml");
             main.setApp(this);
-            System.out.println("Logging in as " + LoggedUser.getFirstName() + " " + LoggedUser.getLastName() );
+            System.out.println("Logging in as " + LoggedUser.getUsername() );
             System.out.println( "Staff count is at " + Staff.getStaffCount() );
         }
         catch (Exception ex) {
@@ -160,12 +154,15 @@ public class Main extends Application
     }
     
     private static void initLists() {
+        staff.add( new AdminStaff( "unspecified", "unspecified", "unspecified", "unspecified", "adminstaff", "password", "unspecified", "unspecified", "unspecified", "unspecified" ));
+        staff.add( new MedicalStaff( "unspecified", "unspecified", "unspecified", "unspecified", "medicalstaff", "password", "unspecified", "unspecified", "unspecified", "unspecified", "unspecified", "unspecified" ));
         try {
             // initialize -> staff and vaccine recipients into respective arraylists
             staff = (List<Staff>) Operations.loadFile().get(0); 
             vaccRecipient = (List<VaccineRecipient>) Operations.loadFile().get(1);
         }
         catch (IOException ex) {
+            
             noUserError();
         }
         catch (ClassNotFoundException ex) {
@@ -241,6 +238,11 @@ public class Main extends Application
     public static void addVaccineRecipient( VaccineRecipient vaccRecipient )
     {
         Main.vaccRecipient.add(vaccRecipient);
+    }
+    
+    public static void removeVaccineRecipient( int recipientIndex )
+    {
+        Main.vaccRecipient.remove( recipientIndex );
     }
     
 }

@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="recipientPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: #333;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvms.controllers.mainwindow.RecipientController">
+<AnchorPane fx:id="recipientPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvms.controllers.RecipientController">
    <children>
       <Separator layoutX="350.0" layoutY="55.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <padding>
@@ -29,12 +29,14 @@
          <children>
             <Pane fx:id="paneRecipient">
                <children>
-                  <Label layoutX="5.0" prefHeight="25.0" text="Recipient ID:">
+                  <Label layoutX="5.0" prefHeight="25.0" text="Recipient Details">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
                   </Label>
-                  <Label alignment="CENTER" layoutX="90.0" prefHeight="25.0" prefWidth="100.0" text="- - - - -" />
                   <TextField fx:id="firstname" layoutY="40.0" promptText="first name" />
                   <TextField fx:id="lastname" layoutX="180.0" layoutY="40.0" promptText="last name" />
                   <ComboBox fx:id="comboGender" layoutY="80.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" promptText="gender">
@@ -54,10 +56,10 @@
                   <Label prefHeight="25.0" text="Vaccine Dose 1" />
                   <DatePicker fx:id="doseDate1" layoutY="80.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" promptText="dose date 1" />
                   <ComboBox fx:id="comboDose1" layoutY="40.0" prefWidth="150.0" promptText="Vaccine" />
-                  <Label alignment="CENTER" layoutX="80.0" prefHeight="25.0" prefWidth="70.0" text="----------" />
-                  <CheckBox fx:id="confirmedDose1" layoutY="120.0" mnemonicParsing="false" text="Administered" />
-                  <Label layoutY="140.0" prefHeight="25.0" text="confirmed by:" />
-                  <Label alignment="CENTER" layoutX="70.0" layoutY="140.0" prefHeight="25.0" prefWidth="80.0" text="-----" />
+                  <Label fx:id="doseID1" alignment="CENTER" layoutX="80.0" prefHeight="25.0" prefWidth="70.0" text="----------" />
+                  <CheckBox fx:id="confirmedDose1" layoutY="150.0" mnemonicParsing="false" text="Confirm" />
+                  <Label layoutY="120.0" prefHeight="25.0" text="confirmed by:" />
+                  <Label fx:id="administeredBy1" alignment="CENTER" layoutX="70.0" layoutY="120.0" prefHeight="25.0" prefWidth="80.0" text="-----" />
                </children>
             </Pane>
             <Pane fx:id="paneDose2" layoutX="180.0" layoutY="240.0" prefHeight="180.0" prefWidth="150.0">
@@ -65,17 +67,18 @@
                   <Label prefHeight="25.0" text="Vaccine Dose 2" />
                   <DatePicker fx:id="doseDate2" layoutY="80.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" promptText="dose date 2" />
                   <ComboBox fx:id="comboDose2" layoutY="40.0" prefWidth="150.0" promptText="Vaccine" />
-                  <Label alignment="CENTER" layoutX="80.0" prefHeight="25.0" prefWidth="70.0" text="----------" />
-                  <CheckBox fx:id="confirmedDose2" layoutY="120.0" mnemonicParsing="false" text="Administered" />
-                  <Label layoutY="140.0" prefHeight="25.0" text="confirmed by:" />
-                  <Label alignment="CENTER" layoutX="70.0" layoutY="140.0" prefHeight="25.0" prefWidth="80.0" text="-----" />
+                  <Label fx:id="doseID2" alignment="CENTER" layoutX="80.0" prefHeight="25.0" prefWidth="70.0" text="----------" />
+                  <CheckBox fx:id="confirmedDose2" layoutY="150.0" mnemonicParsing="false" text="Confirm" />
+                  <Label layoutY="120.0" prefHeight="25.0" text="confirmed by:" />
+                  <Label fx:id="administeredBy2" alignment="CENTER" layoutX="70.0" layoutY="120.0" prefHeight="25.0" prefWidth="80.0" text="-----" />
                </children>
             </Pane>
             <Button fx:id="buttonAddRecord" layoutY="420.0" mnemonicParsing="false" onAction="#saveRecord" prefHeight="25.0" prefWidth="330.0" text="Add Record" />
             <Button fx:id="buttonDeleteRecord" layoutY="460.0" mnemonicParsing="false" onAction="#deleteRecord" prefHeight="25.0" prefWidth="330.0" styleClass="button-obscure" text="Delete Record" />
          </children>
       </Pane>
-      <ListView fx:id="listView" layoutX="390.0" layoutY="105.0" onMouseClicked="#selectRecipient" prefHeight="475.0" prefWidth="280.0" />
+      <ListView fx:id="listView" layoutX="390.0" layoutY="105.0" onMouseClicked="#selectRecipient" prefHeight="430.0" prefWidth="280.0" />
       <TextField fx:id="search" layoutX="390.0" layoutY="70.0" prefWidth="280.0" promptText="search" />
+      <Button layoutX="390.0" layoutY="550.0" mnemonicParsing="false" onAction="#clearSelection" prefHeight="25.0" prefWidth="280.0" styleClass="button-obscure" text="Clear Selection" />
    </children>
 </AnchorPane>
