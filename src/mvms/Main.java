@@ -1,6 +1,7 @@
-package mvss;
+package mvms;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,7 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import mvss.controllers.*;
+import mvms.controllers.*;
 import person.*;
 
 /**
@@ -33,9 +34,11 @@ public class Main extends Application
     
     public static void main( String[] args ) throws IOException
     {
-        staff.add( new AdminStaff( "unspecified", "unspecified", "unspecified", "unspecified", "adminstaff", "password", "unspecified", "unspecified", "unspecified", "unspecified" ));
-        staff.add( new MedicalStaff( "unspecified", "unspecified", "unspecified", "unspecified", "medicalstaff", "password", "unspecified", "unspecified", "unspecified", "unspecified", "unspecified", "unspecified" ));
+        initLists();
+        //staff.add( new AdminStaff( "unspecified", "unspecified", "unspecified", "unspecified", "adminstaff", "password", "unspecified", "unspecified", "unspecified", "unspecified" ));
+        //staff.add( new MedicalStaff( "unspecified", "unspecified", "unspecified", "unspecified", "medicalstaff", "password", "unspecified", "unspecified", "unspecified", "unspecified", "unspecified", "unspecified" ));
         
+        //vaccRecipient.add( new VaccineRecipient( "unspecified", "unspecified", "unspecified", "unspecified", LocalDate.of(2021,05,29), "unspecified" ) );
         
         // launch app
         launch( args );
@@ -85,6 +88,12 @@ public class Main extends Application
         }
         */
         
+        for( Staff s : staff)
+        {
+            System.out.println(s);
+        }
+        
+
         // save arraylists to csv file before end of program
         Operations.saveFile( staff, "staff.csv" );
         Operations.saveFile( vaccRecipient, "vacc.csv" );
@@ -101,7 +110,7 @@ public class Main extends Application
         try {
             stage = primaryStage;
             stage.getIcons().add(new Image("/resources/png/qld icon.png"));
-            stage.setTitle("Login - MVSS");
+            stage.setTitle("Login - MVMS");
             gotoLogin();
             stage.show();
         } catch (Exception ex) {
@@ -111,7 +120,6 @@ public class Main extends Application
     
     public void gotoLogin() {
         try {
-            initLists();
             LoginController login = (LoginController) replaceSceneContent("/resources/login.fxml");
             login.setApp(this);
         } catch (Exception ex) {
@@ -151,7 +159,7 @@ public class Main extends Application
         return (Initializable) loader.getController();
     }
     
-    private void initLists() {
+    private static void initLists() {
         try {
             // initialize -> staff and vaccine recipients into respective arraylists
             staff = (List<Staff>) Operations.loadFile().get(0); 
@@ -209,10 +217,20 @@ public class Main extends Application
     {
         Main.staff = staff;
     }
-
+    
+    public static void setStaff( int staffIndex, Staff staff )
+    {
+        Main.staff.set(staffIndex, staff);
+    }
+    
     public static void setVaccRecipient(List<VaccineRecipient> vaccRecipient)
     {
         Main.vaccRecipient = vaccRecipient;
+    }
+    
+    public static void setVaccRecipient( int recipientIndex, VaccineRecipient vaccRecipient )
+    {
+        Main.vaccRecipient.set(recipientIndex, vaccRecipient);
     }
     
     public static void addStaff( Staff staff )

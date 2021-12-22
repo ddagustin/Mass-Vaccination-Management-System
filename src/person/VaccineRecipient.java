@@ -29,8 +29,8 @@ public class VaccineRecipient extends Person
         this.gender = gender;
         this.RECIPIENTID = String.format("%05d", getRecipientCount());
         
-        this.setFirstVaccineDose( new Vaccine() );
-        this.setSecondVaccineDose( new Vaccine() );
+        this.SETFIRSTVACCDOSE( new Vaccine() );
+        this.SETSECONDVACCDOSE( new Vaccine() );
     }
     
     public VaccineRecipient(String firstName, String lastName, String phoneNumber, String emailAddress,
@@ -48,8 +48,8 @@ public class VaccineRecipient extends Person
         
         this.RECIPIENTID = String.format("%05d", getRecipientCount());
         
-        this.setFirstVaccineDose( new Vaccine() );
-        this.setSecondVaccineDose( new Vaccine() );
+        this.SETFIRSTVACCDOSE( new Vaccine() );
+        this.SETSECONDVACCDOSE( new Vaccine() );
     }
 
     public VaccineRecipient()
@@ -59,8 +59,8 @@ public class VaccineRecipient extends Person
         this.gender = Gender.Unspecified;
         this.RECIPIENTID = "undefined";
         
-        this.setFirstVaccineDose( new Vaccine() );
-        this.setSecondVaccineDose( new Vaccine() );
+        this.SETFIRSTVACCDOSE( new Vaccine() );
+        this.SETSECONDVACCDOSE( new Vaccine() );
     }
 
     public LocalDate getDateOfBirth()
@@ -123,12 +123,12 @@ public class VaccineRecipient extends Person
         }
     }
     
-    public void setFirstVaccineDose(Vaccine vaccine)
+    public final void SETFIRSTVACCDOSE(Vaccine vaccine)
     {
         this.vaccineDoses[0] = vaccine;
     }
     
-    public void setSecondVaccineDose(Vaccine vaccine)
+    public final void SETSECONDVACCDOSE(Vaccine vaccine)
     {
         this.vaccineDoses[1] = vaccine;
     }

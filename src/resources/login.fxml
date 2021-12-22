@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="415.0" maxWidth="380.0" minHeight="393.0" minWidth="380.0" prefHeight="393.0" prefWidth="380.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvss.controllers.LoginController">
+<AnchorPane maxHeight="415.0" maxWidth="380.0" minHeight="393.0" minWidth="380.0" prefHeight="393.0" prefWidth="380.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvms.controllers.LoginController">
    <children>
       <VBox alignment="CENTER" maxHeight="415.0" maxWidth="380.0" minHeight="415.0" minWidth="380.0" prefHeight="415.0" prefWidth="380.0" scaleShape="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>

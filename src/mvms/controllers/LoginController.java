@@ -1,5 +1,7 @@
-package mvss.controllers;
+package mvms.controllers;
 
+import mvms.Main;
+import mvms.Authenticator;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -11,7 +13,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import mvss.*;
 
 /**
  * FXML Controller class

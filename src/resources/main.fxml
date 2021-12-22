@@ -4,7 +4,7 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="870.0" minHeight="-Infinity" minWidth="870.0" prefHeight="600.0" prefWidth="870.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvss.controllers.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="870.0" minHeight="-Infinity" minWidth="870.0" prefHeight="600.0" prefWidth="870.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvms.controllers.MainController">
    <children>
       <SplitPane dividerPositions="0.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>

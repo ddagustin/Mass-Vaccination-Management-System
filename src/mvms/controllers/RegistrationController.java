@@ -1,5 +1,7 @@
-package mvss.controllers;
+package mvms.controllers;
 
+import mvms.Authenticator;
+import mvms.Main;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -9,7 +11,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import mvss.*;
 import person.*;
 
 /**

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="790.0" prefWidth="440.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvss.controllers.RegistrationController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="790.0" prefWidth="440.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvms.controllers.RegistrationController">
    <children>
       <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -61,10 +61,10 @@
                               <TextField fx:id="phoneNumber" layoutY="65.0" prefHeight="25.0" prefWidth="320.0" promptText="phone number" />
                               <TextField fx:id="username" layoutY="105.0" prefHeight="25.0" prefWidth="320.0" promptText="username" />
                               <TextField fx:id="password" layoutY="145.0" prefHeight="25.0" prefWidth="320.0" promptText="password" />
+                              <TextField fx:id="confirmPassword" layoutY="185.0" prefHeight="25.0" prefWidth="320.0" promptText="confirm password" />
                               <Button layoutY="225.0" mnemonicParsing="false" onAction="#registerStaff" prefHeight="25.0" prefWidth="320.0" text="Register" />
                               <Button layoutY="265.0" mnemonicParsing="false" onAction="#processGoBack" prefHeight="25.0" prefWidth="320.0" styleClass="button-obscure" text="&lt; Go Back" />
                               <Separator layoutX="60.0" layoutY="5.0" prefWidth="200.0" />
-                              <TextField fx:id="confirmPassword" layoutY="185.0" prefHeight="25.0" prefWidth="320.0" promptText="confirm password" />
                            </children>
                         </Pane>
                         <Separator layoutX="60.0" layoutY="165.0" prefWidth="200.0" />

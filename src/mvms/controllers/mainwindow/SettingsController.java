@@ -1,5 +1,8 @@
-package mvss.controllers.mainwindow;
+package mvms.controllers.mainwindow;
 
+import mvms.controllers.MainController;
+import mvms.Authenticator;
+import mvms.Main;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -11,8 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import mvss.*;
-import mvss.controllers.*;
 import person.*;
 
 /**
@@ -146,7 +147,7 @@ public class SettingsController implements Initializable
                 currentUser.setSuburbAddress( suburb.getText() );
                 currentUser.setStateAddress( state.getText() );
             
-                Main.getStaff().set( currentUserIndex, currentUser );
+                Main.setStaff( currentUserIndex, currentUser );
             
                 setUserDetails( currentUser, false );
                 buttonChangeDetails.setText( "Update Details" );
@@ -174,8 +175,8 @@ public class SettingsController implements Initializable
                 currentUser.setUsername( username.getText() );
                 currentUser.setPassword( password.getText() );
             
-                Main.getStaff().set( currentUserIndex, currentUser );
-                
+                Main.setStaff( currentUserIndex, currentUser );
+            
                 Authenticator.loadCredentials(currentUser);
             
                 setUsername( currentUser, false );

@@ -2,8 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package mvss.controllers;
+package mvms.controllers;
 
+import mvms.controllers.mainwindow.SettingsController;
+import mvms.controllers.mainwindow.RecipientController;
+import mvms.Main;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -14,8 +17,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-import mvss.*;
-import mvss.controllers.mainwindow.*;
 
 /**
  * FXML Controller class

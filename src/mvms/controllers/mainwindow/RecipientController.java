@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package mvss.controllers.mainwindow;
+package mvms.controllers.mainwindow;
 
+import mvms.controllers.MainController;
+import mvms.Main;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
@@ -22,8 +24,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import mvss.*;
-import mvss.controllers.*;
 import person.*;
 
 /**
@@ -144,12 +144,25 @@ public class RecipientController implements Initializable
 
     @FXML
     void saveRecord(ActionEvent event) {
-        //System.out.println(comboBirthday.getValue());
+        enterDetails(true);
     }
 
     @FXML
     void selectRecipient(MouseEvent event) {
 
+    }
+    
+    public void enterDetails( boolean mode )
+    {
+        if( checkFields() ) {
+            VaccineRecipient entry = new VaccineRecipient( firstname.getText(), lastname.getText(), phoneNumber.getText(), emailAddress.getText(), comboBirthday.getValue(), comboGender.getSelectionModel().getSelectedItem() );
+
+            Main.addVaccineRecipient(entry);
+            recipientList.add( entry.getFirstName() + " " + entry.getLastName() );
+        }
+        else {
+            System.out.println( "Check fields" );
+        }
     }
     
     private boolean checkFields()
@@ -159,9 +172,7 @@ public class RecipientController implements Initializable
                 !comboGender.getSelectionModel().isEmpty() &&
                 !(comboBirthday.getValue() == null) &&
                 !phoneNumber.getText().isBlank() &&
-                !emailAddress.getText().isBlank() &&
-                !comboDose1.getSelectionModel().isEmpty() &&
-                !(comboDose1.getValue() == null);
+                !emailAddress.getText().isBlank();
     }
     
     public void setLoggedUser()
@@ -180,16 +191,6 @@ public class RecipientController implements Initializable
             
             buttonAddRecord.setText( "Confirm Vaccine Dose/s" );
             buttonDeleteRecord.setVisible(false);
-        }
-        
-        if( confirmedDose1.isSelected() ) {
-            comboDose2.setDisable(true);
-            doseDate2.setDisable(true);
-            confirmedDose2.setDisable(true);
-            
-            comboDose1.setEditable(false);
-            doseDate1.setEditable(false);
-            confirmedDose1.setDisable(true);
         }
     }
     
