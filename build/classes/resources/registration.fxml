@@ -48,7 +48,11 @@
                         <TextField fx:id="suburb" layoutY="125.0" prefHeight="25.0" prefWidth="150.0" promptText="suburb" />
                         <TextField fx:id="state" layoutX="170.0" layoutY="125.0" prefHeight="25.0" prefWidth="150.0" promptText="state" />
                         <ComboBox fx:id="chooseStaffType" layoutY="185.0" onAction="#onSelectStaffType" prefHeight="30.0" prefWidth="320.0" promptText="Select Staff Type" />
-                        <ComboBox fx:id="choosePositionType" layoutY="230.0" prefHeight="30.0" prefWidth="320.0" promptText="Select Position Type" />
+                        <Pane layoutY="230.0">
+                           <children>
+                              <ComboBox fx:id="choosePositionType" prefHeight="30.0" prefWidth="320.0" promptText="Select Position Type" />
+                           </children>
+                        </Pane>
                         <Pane fx:id="medicalPane" layoutY="275.0">
                            <children>
                               <TextField fx:id="registrationID" prefHeight="25.0" prefWidth="320.0" promptText="registration id" />

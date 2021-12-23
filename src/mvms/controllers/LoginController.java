@@ -1,41 +1,34 @@
 package mvms.controllers;
 
-import mvms.Main;
-import mvms.Authenticator;
+import mvms.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 /**
- * FXML Controller class
- *
- * @author DR
+ * Assessment 1: Mass Vaccination Management System
+ *      LoginController class contains all methods related to the login window
+ * 
+ * @author DAgustin
+ * 03 Dec 2021
  */
 public class LoginController implements Initializable
 {
+    // initialise unique variables to this class
     private Main application;
     
     @FXML
-    private Hyperlink linkRegistration;
-    
-    @FXML
     private PasswordField password;
-
+    
     @FXML
     private TextField username;
     
-    public void setApp(Main application){
-        this.application = application;
-    }
-    
+    // FXML methods
     @FXML
     void buttonLogin(ActionEvent event) {
         processLogin();
@@ -58,9 +51,15 @@ public class LoginController implements Initializable
      */
     public void initialize(URL url, ResourceBundle rb)
     {
-        // TODO
+        // nothing to do
     }
     
+    // setApp to cast Main class into this class for easy access
+    public void setApp(Main application){
+        this.application = application;
+    }
+    
+    // error showing when credentials are not valid
     private static void loginError() {
         Alert alert = new Alert( Alert.AlertType.WARNING );
         alert.setTitle( "Invalid username or password!" );
@@ -69,6 +68,7 @@ public class LoginController implements Initializable
         alert.showAndWait();
     }
     
+    // method to handle validation of login credentials
     public void processLogin() {
         if( Authenticator.checker(username.getText(), password.getText()) ) {
             Main.setLoggedUser( username.getText() );

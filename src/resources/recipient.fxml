@@ -37,8 +37,8 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="firstname" layoutY="40.0" promptText="first name" />
-                  <TextField fx:id="lastname" layoutX="180.0" layoutY="40.0" promptText="last name" />
+                  <TextField fx:id="firstName" layoutY="40.0" promptText="first name" />
+                  <TextField fx:id="lastName" layoutX="180.0" layoutY="40.0" promptText="last name" />
                   <ComboBox fx:id="comboGender" layoutY="80.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" promptText="gender">
                      <opaqueInsets>
                         <Insets />

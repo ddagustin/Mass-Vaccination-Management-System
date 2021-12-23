@@ -13,42 +13,40 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 
 /**
- * FXML Controller class
- *
- * @author DR
+ * Assessment 1: Mass Vaccination Management System
+ *      MainController class handles the main window.
+ *      this class only contains navigation controls when accessing the left pane in the main window
+ *      handles switching the right pane
+ *          - vaccine recipients
+ *          - user settings
+ * 
+ * @author DAgustin
+ * 03 Dec 2021
  */
 public class MainController implements Initializable
 {
+    // initialise unique variables to this class
     public Main application;
     
     @FXML
-    private Button buttonLogout;
-    
-    @FXML
-    private Button buttonHome;
-     
-    @FXML
     public AnchorPane mainPane;
 
-    
-    public void setApp(Main application){
-        this.application = application;
-    }
-    
+    // handles going back to the login page
     @FXML
     void processLogout(ActionEvent event) {
         application.gotoLogin();
     }
     
+    // handles right pane switching to vaccine recipient
     @FXML
     void showVaccineRecipient(ActionEvent event) throws Exception {
         gotoVaccRecipient();
     }
     
+    // handles right pane switching to user settings
     @FXML
     void showSettings( ActionEvent event ) throws Exception
     {
@@ -57,6 +55,7 @@ public class MainController implements Initializable
 
     /**
      * Initializes the controller class.
+     * shows the vaccine recipient pane by default
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)
@@ -69,24 +68,29 @@ public class MainController implements Initializable
         }
     }    
     
+    // handles setting Main class instance to this class for access
+    public void setApp(Main application){
+        this.application = application;
+    }
+    
+    // handles scene replacement and controller management - adds all children of recipient fxml to the right pane
     public void gotoVaccRecipient() throws Exception 
     {
         FXMLLoader loader =  new FXMLLoader( getClass().getResource( "/resources/recipient.fxml" ));
         mainPane.getChildren().setAll( (AnchorPane) loader.load() );
         
         RecipientController recipient = loader.getController();
-        recipient.setMainController(this);
         
         recipient.setLoggedUser();
     }
     
+    // handles scene replacement and controller management - adds all children of settings fxml to the right pane
     public void gotoAccountSettings() throws Exception
     {
         FXMLLoader loader = new FXMLLoader( getClass().getResource( "/resources/settings.fxml" ));
         mainPane.getChildren().setAll( (AnchorPane) loader.load() );
         
         SettingsController settings = loader.getController();
-        settings.setMainController(this);
         
         settings.setLoggedUser();
     }

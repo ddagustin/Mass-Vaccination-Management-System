@@ -2,7 +2,6 @@ package mvms;
 
 import entities.*;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -20,98 +19,69 @@ import javafx.stage.Stage;
 import mvms.controllers.*;
 
 /**
- * Assessment 1: Mass Vaccination System
+ * Assessment 1: Mass Vaccination Management System
+ *      Main class to handle top level methods and global variables
+ *          contains loading of dump.tmp, saving the dump.tmp and csv files upon termination of the program
+ *          contains handling of changing scenes and controllers on the top level
+ *              - login window
+ *              - main window
+ *              - registration window
+ * 
  * @author DAgustin
  * 03 Dec 2021
  */
 public class Main extends Application
 {
+    // initialise global variables
     private Stage stage;
     private static Staff LoggedUser;
     
+    // arraylists containing the staff and recipients
     private static List<Staff> staff = new ArrayList<>();
     private static List<VaccineRecipient> vaccRecipient = new ArrayList<>();
     
-    public static void main( String[] args ) throws IOException
+    // main method
+    public static void main( String[] args )
     {
-        //vaccRecipient.add( new VaccineRecipient( "unspecified", "unspecified", "unspecified", "unspecified", LocalDate.of(2021,05,29), "unspecified" ) );
-        
-        // launch app
         launch( args );
         
-        
-        /*
-        staff.add( new AdminStaff( "Daniel", "Agustin", "0431133559", "danielroi.agustin@gmail.com", "ddagustin", "D@nnroi0529", "28 Viney St", "Gracemere", "QLD", "FullTime" ));
-        staff.add( new MedicalStaff( "Daniel", "Agustin", "0431133559", "danielroi.agustin@gmail.com", "ddagustin", "D@nnroi0529", "28 Viney St", "Gracemere", "QLD", "2011-44869", "Woolies", "GeneralPracitioner" ));
-        
-        //staff.forEach(currentStaff -> {
-        //    System.out.println( currentStaff );
-        //});
-        
-        Operations.saveFile( staff, "staff.csv" );
-        
-        List< VaccineRecipient > vaccine = new ArrayList<>();
-        vacc.add( new VaccineRecipient( "Mat", "Field", "123", "example@gmail.com", LocalDate.of(2021,05,29), "Male" ) );
-        
-        Operations.saveFile( vacc, "vacc.csv" );
-        
-        List<String[]> uniqueID = new ArrayList<>();
-        uniqueID = Operations.getListID( "src/files/staff.csv" );
-        
-        
-        */
-        /*
-        for( int i = 0; i < 2; i++ ) {
-            System.out.print( uniqueID.get(i) + " " );
-            System.out.println( staff.get(i).getStaffID() );
-            System.out.println( uniqueID.get(i).equals(staff.get(i).getStaffID()) );
-            
+        // if saving fails, show in terminal that file was not saved
+        try {
+            // save arraylists to csv file before end of program
+            Operations.saveFile( staff, "staff.csv" );
+            Operations.saveFile( vaccRecipient, "vacc.csv" );
+            System.out.println( "saved csv files" );
+
+            // dump staff and vaccine recipient to tmp file
+            List<?> dump = Stream.of( staff, vaccRecipient ).flatMap( Collection::stream ).collect( Collectors.toList() );
+            Operations.dumpFile((List<Person>) dump);
+            System.out.println("saved dump");
         }
-        */
-        
-        /*
-        for( String[] content : uniqueID ) {
-            //System.out.println( content );
-            //System.out.println( content[1] );
-            
-            if( content[0].equals("AdmminStaff") ) {
-                
-            }
-            else {
-                
-            }
-            
+        catch( IOException ex ) {
+            System.out.println( "File not saved" );
         }
-        */
-        
-        // save arraylists to csv file before end of program
-        Operations.saveFile( staff, "staff.csv" );
-        Operations.saveFile( vaccRecipient, "vacc.csv" );
-        
-        // dump staff and vaccine recipient to tmp file
-        List<?> dump = Stream.of( staff, vaccRecipient ).flatMap( Collection::stream ).collect( Collectors.toList() );
-        System.out.println("loaded dump");
-        Operations.dumpFile((List<Person>) dump);
-        System.out.println("saved dump");
     }
     
+    // start the application
     @Override
     public void start(Stage primaryStage) {
+        // handle launch of application by going to the login page
         try {
             stage = primaryStage;
             stage.getIcons().add(new Image("/resources/png/qld icon.png"));
             stage.setTitle("Login - MVMS");
-            initLists();
+            
+            initLists();    // initialise staff and vaccRecipient arraylists
             
             gotoLogin();
             stage.show();
-            
             
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
+    // handles loading of the login controller and fxml
     public void gotoLogin() {
         try {
             LoginController login = (LoginController) replaceSceneContent("/resources/login.fxml");
@@ -121,18 +91,21 @@ public class Main extends Application
         }
     }
     
+    // handles loading of the main window controller and fxml
     public void gotoHome() {
         try {
             MainController main = (MainController) replaceSceneContent("/resources/main.fxml");
             main.setApp(this);
+            
+            // show in terminal the logged in usercredentials
             System.out.println("Logging in as " + LoggedUser.getUsername() );
-            System.out.println( "Staff count is at " + Staff.getStaffCount() );
         }
         catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
+    // handles loading of the registration window controller and fxml
     public void gotoRegistration() {
         try {
             RegistrationController register = (RegistrationController) replaceSceneContent("/resources/registration.fxml");
@@ -143,6 +116,7 @@ public class Main extends Application
         }
     }
     
+    // method to replace the contents of the stage and scene, changing the window size and controller
     private Initializable replaceSceneContent(String fxml) throws Exception {
         FXMLLoader loader =  new FXMLLoader( getClass().getResource( fxml ));
         Parent root = loader.load();
@@ -153,9 +127,13 @@ public class Main extends Application
         return (Initializable) loader.getController();
     }
     
+    // initialise the staff and vacc recipient lists
     private static void initLists() {
+        
+        // ensures to add one of each staff type in case the loading try block below fails
         staff.add( new AdminStaff( "unspecified", "unspecified", "unspecified", "unspecified", "adminstaff", "password", "unspecified", "unspecified", "unspecified", "unspecified" ));
         staff.add( new MedicalStaff( "unspecified", "unspecified", "unspecified", "unspecified", "medicalstaff", "password", "unspecified", "unspecified", "unspecified", "unspecified", "unspecified", "unspecified" ));
+        
         try {
             // initialize -> staff and vaccine recipients into respective arraylists
             staff = (List<Staff>) Operations.loadFile().get(0); 
@@ -163,13 +141,14 @@ public class Main extends Application
         }
         catch (IOException ex) {
             
-            noUserError();
+            noUserError();  // will not be shown due to the two staff added above
         }
         catch (ClassNotFoundException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
+    // if there is no dump file found in the files folder, show error.
     private static void noUserError() {
         Alert alert = new Alert( Alert.AlertType.WARNING );
         alert.setTitle( "No user detected" );
@@ -178,7 +157,13 @@ public class Main extends Application
         alert.showAndWait();
     }
     
-    // get methods
+    /**
+     * Get methods
+     *      returns the various variables associated with this class
+     * 
+     * @return stage, LoggedUser, staff, vaccRecipient
+     */
+    
     public Stage getStage()
     {
         return stage;
@@ -199,7 +184,11 @@ public class Main extends Application
         return vaccRecipient;
     }
     
-    // set methods
+    /**
+     * Set methods
+     *      enables the modification of the class variables
+     */
+    
     public void setStage(Stage stage)
     {
         this.stage = stage;
@@ -207,7 +196,7 @@ public class Main extends Application
 
     public static void setLoggedUser(String username)
     {
-        Main.LoggedUser = Operations.getUser( Main.staff, username );
+        Main.LoggedUser = Operations.getUser( username );
     }
 
     public static void setStaff(List<Staff> staff)
@@ -215,6 +204,7 @@ public class Main extends Application
         Main.staff = staff;
     }
     
+    // overloaded method to accept setting staff at an index
     public static void setStaff( int staffIndex, Staff staff )
     {
         Main.staff.set(staffIndex, staff);
@@ -225,21 +215,25 @@ public class Main extends Application
         Main.vaccRecipient = vaccRecipient;
     }
     
+    // overloaded method to accept setting recipient at an index
     public static void setVaccRecipient( int recipientIndex, VaccineRecipient vaccRecipient )
     {
         Main.vaccRecipient.set(recipientIndex, vaccRecipient);
     }
     
+    // method to add a new entry into the staff list
     public static void addStaff( Staff staff )
     {
         Main.staff.add(staff);
     }
     
+    // method to add a new entry into the vaccRecipient list
     public static void addVaccineRecipient( VaccineRecipient vaccRecipient )
     {
         Main.vaccRecipient.add(vaccRecipient);
     }
     
+    // method to remove a recipient
     public static void removeVaccineRecipient( int recipientIndex )
     {
         Main.vaccRecipient.remove( recipientIndex );

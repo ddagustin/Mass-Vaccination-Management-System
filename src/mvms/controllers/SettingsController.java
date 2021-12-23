@@ -1,31 +1,25 @@
 package mvms.controllers;
 
-import entities.MedicalStaff;
-import entities.AdminStaff;
-import entities.Staff;
-import mvms.Authenticator;
-import mvms.Main;
+import entities.*;
+import mvms.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
-import mvms.Operations;
 
 /**
- * FXML Controller class
- *
- * @author DR
+ * Assessment 1: Mass Vaccination Management System
+ *      RegistrationController class contains all functions and data when a new user registers
+ * 
+ * @author DAgustin
+ * 03 Dec 2021
  */
 public class SettingsController implements Initializable
 {
-    private MainController mainController;
+    // initialise unique variables to this class
     private Staff currentUser;
     private int currentUserIndex;
     
@@ -100,53 +94,24 @@ public class SettingsController implements Initializable
 
     /**
      * Initializes the controller class.
+     * set visible nodes
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb)
-    {
+    public void initialize(URL url, ResourceBundle rb) {
         password.setVisible(false);
         confirmPassword.setVisible(false);
     }    
     
-    public void setMainController( MainController mainController )
-    {
-        this.mainController = mainController;
-    }
-    
-    public void setLoggedUser()
-    {
-        currentUser = Main.getLoggedUser();
-        currentUserIndex = Main.getStaff().indexOf( currentUser );
-        
-        setUserDetails( currentUser, false );
-        setUsername( currentUser, false );
-        
-        staffType.setText( currentUser.getClass().getSimpleName() );
-        
-        if( currentUser.getClass().getSimpleName().equals( "AdminStaff" ) )
-        {
-            medicalPane.setVisible(false);
-            positionType.setText( ((AdminStaff) currentUser).getPositionType().name() );
-        }
-        else
-        {
-            positionType.setVisible(false);
-            registrationID.setText( ((MedicalStaff) currentUser).getRegistrationNumber()  );
-            affiliation.setText( ((MedicalStaff) currentUser).getAffiliation() );
-            category.setText( ((MedicalStaff) currentUser).getCategory().name() ); 
-        }
-    }
-    
+    // handle changing of only the basic user details
     @FXML
     void changeDetails(ActionEvent event) {
-        if( buttonChangeDetails.getText().equals( "Update Details" ))
-        {
+        if( buttonChangeDetails.getText().equals( "Update Details" )) {
             setUserDetails( currentUser, true );
             buttonChangeDetails.setText( "Save User Details" );
         }
-        else
-        {
+        else {
             try {
+                // validate fields and inputs
                 userStringCheck();
                 currentUser.setFirstName( firstName.getText() );
                 currentUser.setLastName( lastName.getText() );
@@ -168,6 +133,7 @@ public class SettingsController implements Initializable
         
     }
     
+    // handle changing of username password - separate from above method
     @FXML
     void changePassword(ActionEvent event) {
         
@@ -195,11 +161,10 @@ public class SettingsController implements Initializable
             {
                 showError();
             }
-            
         }
-        
     }
     
+    // cancel basic details changes and reinitialise fields
     @FXML
     void cancelDetailChanges(ActionEvent event) {
         setUserDetails( currentUser, false );
@@ -207,6 +172,7 @@ public class SettingsController implements Initializable
         firstName.requestFocus();
     }
 
+    // cancel username and passsword changes and reinitialise fields
     @FXML
     void cancelPasswordChanges(ActionEvent event) {
         setUsername( currentUser, false );
@@ -214,6 +180,31 @@ public class SettingsController implements Initializable
         username.requestFocus();
     }
     
+    // to populate fields using the current logged in staff information
+    public void setLoggedUser() {
+        currentUser = Main.getLoggedUser();
+        currentUserIndex = Main.getStaff().indexOf( currentUser );
+        
+        setUserDetails( currentUser, false );
+        setUsername( currentUser, false );
+        
+        staffType.setText( currentUser.getClass().getSimpleName() );
+        
+        // check staff type and change layout accordingly
+        if( currentUser.getClass().getSimpleName().equals( "AdminStaff" )) {
+            medicalPane.setVisible(false);
+            positionType.setText( ((AdminStaff) currentUser).getPositionType().name() );
+        }
+        else {
+            positionType.setVisible(false);
+            registrationID.setText( ((MedicalStaff) currentUser).getRegistrationNumber()  );
+            affiliation.setText( ((MedicalStaff) currentUser).getAffiliation() );
+            category.setText( ((MedicalStaff) currentUser).getCategory().name() ); 
+        }
+    }
+    
+    // populate basic details fields
+    // mode controls editability if in updating mode or view mode
     private void setUserDetails( Staff user, boolean mode )
     {
         // setting text to loggeduser details
@@ -238,6 +229,8 @@ public class SettingsController implements Initializable
         buttonCancelDetailChanges.setDisable(!mode);
     }
     
+    // populate username and password fields
+    // mode controls editability if in updating mode or view mode
     private void setUsername( Staff user, boolean mode )
     {
         username.setText( user.getUsername() );
@@ -252,9 +245,16 @@ public class SettingsController implements Initializable
         buttonCancelPasswordChanges.setDisable(!mode);
     }
     
+    /*
+        validates basic user details using Operations.valdateFields method
+        additional validation on some fields:
+        - firstName and lastName should have no digits
+        - phoneNumber should be 10 digits long
+        - email should be in sample@sample.sample format
+    */ 
     private void userStringCheck()
     {
-        if( Operations.validateFields( detailsPane ) ) {    
+        if( Operations.validateFields( detailsPane ) ) {
             if( !firstName.getText().matches(".*\\d.*") && !lastName.getText().matches(".*\\d.*") && phoneNumber.getText().matches( "^\\d{10}$" ) && emailAddress.getText().matches( "^(.+)@(.+)$" ) ) {
                 return;
             }
@@ -262,15 +262,24 @@ public class SettingsController implements Initializable
         throw new IllegalArgumentException( "One of the input fields have an invalid argument." );
     }
     
+    /*
+        validates basic user details using Operations.valdateFields method
+        additional validation on some fields:
+        - passwords should match
+        - username should be unique
+    */ 
     private void passwordStringCheck()
     {
         if( Operations.validateFields( passwordPane ) ) {
-            if( password.getText().equals(confirmPassword.getText()) )
-                return;
+            if( !Authenticator.usernameExists( username.getText() ) ) {
+                if( password.getText().equals(confirmPassword.getText()) )
+                    return;
+            }
         }
         throw new IllegalArgumentException( "One of the input fields have an invalid argument." );
     }
     
+    // error showing when the input fields have something wrong with the inputs
     private static void showError() {
         Alert alert = new Alert( Alert.AlertType.WARNING );
         alert.setTitle( "One or more fields have a problem" );

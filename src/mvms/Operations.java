@@ -1,15 +1,7 @@
 package mvms;
 
 import entities.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -19,27 +11,31 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 
 /**
- * Assessment 1: Mass Vaccination System
+ * Assessment 1: Mass Vaccination Management System
+ *      Operations class contains all functions shared by the whole program - primarily in loading, saving, and dumping
+ *          files into directory for management, accessing, and storage of information
+ *      contains validateFields method to summarize node checking if each node contains a valid input
+ * 
  * @author DAgustin
  * 03 Dec 2021
  */
 public class Operations
 {
+    // initialise unique variables to this class
     private static String fileName;
     
-    // read csv file
-    public static void saveFile( List<?> arraylist, String filename ) throws IOException
-    {
+    // read csv files
+    public static void saveFile( List<?> arraylist, String filename ) throws IOException {
         fileName = "src/files/" + filename;
         
-        
+        // create or overwrite filename
         try {
             File myFile = new File( fileName );
             if( myFile.createNewFile( )) {
                 System.out.println( "file created" );
             }
             else {
-                System.out.println( "file already exists" );
+                System.out.println( filename +  " already exists, overwriting" );
                 // update file
             }
         }
@@ -47,20 +43,13 @@ public class Operations
             System.out.println( "An error occured in creating file" );
         }
         finally {
-        
-            //id = arraylist;
-            //System.out.println( arraylist );
-        
+            // save classes to csv using toCSV method
             try {
                 FileWriter myWriter = new FileWriter( fileName );
-                    //for( Staff line : arraylist ) {
-                    //    myWriter.write( line.toCSV() );
-                    //}
-                    
                 for( int i = 0; i < arraylist.size(); i++ ) {
                     myWriter.write( ((Person) arraylist.get(i)).toCSV() );
                 }
-                    
+                // flush and close for memory refreshing    
                 myWriter.flush(); myWriter.close();                    
             }
             catch( IOException ex ) {
@@ -69,24 +58,8 @@ public class Operations
         }
     }
     
-    // do not need this??
-    public static List<String[]> getListID( String filename ) throws IOException
-    {
-        BufferedReader reader = new BufferedReader( new FileReader( filename ));
-        List<String[]> contents = new ArrayList<>();
-        
-        String line;
-        
-        while( (line = reader.readLine()) != null ) {
-            //System.out.println( line );
-            contents.add(line.split(","));
-        }
-        
-        return contents;
-    }
-    
-    public static void dumpFile( List<Person> arraylist ) throws IOException
-    {
+    // dump to file as objects
+    public static void dumpFile( List<Person> arraylist ) throws IOException {
         FileOutputStream fos = new FileOutputStream("src/files/dump.tmp");
         try (ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject( (List<Person>) arraylist );
@@ -95,14 +68,13 @@ public class Operations
             
     }
     
-    public static ArrayList< List<?> > loadFile() throws IOException, ClassNotFoundException
-    {
+    // load dump to program
+    public static ArrayList< List<?> > loadFile() throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream("src/files/dump.tmp");
         List<Person> dump;
         try (ObjectInputStream ois = new ObjectInputStream(fis)) {
             dump = (List<Person>) ois.readObject();
         }
-        
         
         List< Staff > staff = new ArrayList<>();
         List< VaccineRecipient > vaccRecipient = new ArrayList<>();
@@ -132,15 +104,16 @@ public class Operations
             
         }
         
+        // condense into one arraylist
         ArrayList< List<?> > person = new ArrayList<>();
         person.add(staff); person.add(vaccRecipient);
         
         return person;
     }
     
-    public static Staff getUser( List<Staff> staff, String username )
-    {
-        for( Staff currentStaff : staff )
+    // returns the currentStaff if it exists
+    public static Staff getUser( String username ) {
+        for( Staff currentStaff : Main.getStaff() )
         {
             if( currentStaff.getUsername().equals(username))
                 return currentStaff;
@@ -148,14 +121,13 @@ public class Operations
         return null;
     }
     
-    public static boolean validateFields( Pane pane )
-    {
+    // for controller class use - iterates through nodes in a pane to check if it matches the requirement
+    public static boolean validateFields( Pane pane ) {
         String input;
         for( Node node : pane.getChildren() ) {
             if( node instanceof TextField ) {
                 input = ((TextField) node).getText();
                 if( input.isBlank() ) {
-                    System.out.println( "textfield is blank" );
                     return false;
                 }
             }
@@ -166,7 +138,6 @@ public class Operations
             }
             else if( node instanceof ComboBox ) {
                 if( ((ComboBox) node).getSelectionModel().isEmpty() ) {
-                    System.out.println( "combobox is blank" );
                     return false;
                 }
             }
@@ -174,13 +145,11 @@ public class Operations
                 DatePicker dp = (DatePicker) node;
                 DateTimeFormatter df = DateTimeFormatter.ofPattern("d/M/yyyy");
                 if( dp.getEditor().getText().isBlank() ) {
-                    System.out.println( "is blank" );
                     return false;
                 }
                 else {
                     dp.setValue ( LocalDate.parse(dp.getEditor().getText(), df) );
                     if( dp.getValue() == null ) {
-                        System.out.println( "is null" );
                         return false;
                     }
                 }

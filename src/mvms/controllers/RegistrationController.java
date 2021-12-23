@@ -1,26 +1,25 @@
 package mvms.controllers;
 
-import entities.AdminStaff;
-import entities.MedicalStaff;
-import mvms.Authenticator;
-import mvms.Main;
+import entities.*;
+import mvms.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
-import mvms.Operations;
 
 /**
- * FXML Controller class
- *
- * @author DR
+ * Assessment 1: Mass Vaccination Management System
+ *      RegistrationController class contains all functions and data when a new user registers
+ * 
+ * @author DAgustin
+ * 03 Dec 2021
  */
 public class RegistrationController implements Initializable
 {
+    // initialise unique variables to this class
     private Main application;
     private String selectedStaffType;
     
@@ -78,34 +77,13 @@ public class RegistrationController implements Initializable
     @FXML
     private TextField username;
 
-    
-    public void setApp(Main application){
-        this.application = application;
-    }
-    
-    @FXML
-    void processGoBack(ActionEvent event) {
-        application.gotoLogin();
-    }
-    
-    @FXML
-    void onSelectStaffType(ActionEvent event) {
-        choosePositionType.setVisible(false);
-        medicalPane.setVisible(false);
-        selectedStaffType = chooseStaffType.getSelectionModel().getSelectedItem();
-        
-        switch( selectedStaffType ) {
-            case "Administrative Staff" -> layoutAdmin();
-            case "Medical Staff" -> layoutMedical();
-        }
-    }
-    
     /**
      * Initializes the controller class.
+     * adds the combobox options
+     * set visible panes
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb)
-    {
+    public void initialize(URL url, ResourceBundle rb) {
         chooseStaffType.getItems().add("Administrative Staff");
         chooseStaffType.getItems().add("Medical Staff");
         choosePositionType.getItems().add("Full Time");
@@ -118,37 +96,59 @@ public class RegistrationController implements Initializable
         contactPane.setLayoutY(230);
     }
     
-    private void layoutAdmin()
-    {
-        choosePositionType.setVisible(true);
-        contactPane.setLayoutY(275);
-        
-        application.getStage().setHeight(875);
-        
-        //application.stage.setHeight(830);
+    // handles going back to the login page
+    @FXML
+    void processGoBack(ActionEvent event) {
+        application.gotoLogin();
     }
     
-    private void layoutMedical()
-    {
-        medicalPane.setVisible(true);
-        medicalPane.setLayoutY(230);
-        contactPane.setLayoutY(345);
-        
-        application.getStage().setHeight(945);
-
-    }
-    
+    // handles adding of staff to the credentials Main.staff
     @FXML
     void registerStaff(ActionEvent event) {
         addStaff();
     }
     
+    // handles showing of hidden panes
+    @FXML
+    void onSelectStaffType(ActionEvent event) {
+        choosePositionType.setVisible(false);
+        medicalPane.setVisible(false);
+        selectedStaffType = chooseStaffType.getSelectionModel().getSelectedItem();
+        
+        switch( selectedStaffType ) {
+            case "Administrative Staff" -> layoutAdmin();
+            case "Medical Staff" -> layoutMedical();
+        }
+    }
+    
+    // handles setting Main class instance to this class for access
+    public void setApp(Main application){
+        this.application = application;
+    }
+    
+    // layout of the window if selected staff type is AdminStaff
+    private void layoutAdmin() {
+        choosePositionType.setVisible(true);
+        contactPane.setLayoutY(275);
+        
+        application.getStage().setHeight(875); 
+    }
+    
+    // layout of the window if selected staff type is MedicalStaff
+    private void layoutMedical() {
+        medicalPane.setVisible(true);
+        medicalPane.setLayoutY(230);
+        contactPane.setLayoutY(345);
+        
+        application.getStage().setHeight(945);
+    }
+    
+    // method to add staff into the Main.staff
     private void addStaff() {
         selectedStaffType = chooseStaffType.getSelectionModel().getSelectedItem();
         
         try {
             checkFields();
-            System.out.println( "true" );
             Authenticator.loadCredentials( username.getText(), password.getText() );
             switch( selectedStaffType ) {
                 case "Administrative Staff" 
@@ -160,7 +160,6 @@ public class RegistrationController implements Initializable
                                     username.getText(), password.getText(), streetAddress.getText(), suburb.getText(), state.getText(),
                                     registrationID.getText(), affiliation.getText(), category.getText() ));
             }
-            
             registrationSuccess();
         }
         catch( IllegalArgumentException ex ) {
@@ -168,6 +167,14 @@ public class RegistrationController implements Initializable
         }
     }
     
+    /*
+        includes basic validation of input fields using Operations.valdateFields method
+        includes validation of firstName, lastName without a digit
+        includes validation of phoneNumber to be 10 digits
+        includes validation of emailAddress to be of sample@sample.sample format
+        includes validation whether username already exists
+        includes validation whether passwords match
+    */
     private void checkFields()
     {
         selectedStaffType = chooseStaffType.getSelectionModel().getSelectedItem();
@@ -194,6 +201,7 @@ public class RegistrationController implements Initializable
         throw new IllegalArgumentException( "One of the input fields have an invalid argument." );
     }
     
+    // error showing when the input fields have something wrong with the inputs
     private void registrationError() {
         Alert alert = new Alert( Alert.AlertType.WARNING );
         alert.setTitle( "Some fields have invalid inputs" );
@@ -202,6 +210,7 @@ public class RegistrationController implements Initializable
         alert.showAndWait();
     }
     
+    // information showing when registration is successfull -> proceed to go back to login page.
     private void registrationSuccess() {
         Alert alert = new Alert( Alert.AlertType.INFORMATION );
         alert.setTitle( "Registration Success" );

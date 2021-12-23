@@ -38,7 +38,7 @@
                         <Label layoutX="4.0" layoutY="45.0" prefHeight="25.0" prefWidth="85.0" text="Password" />
                         <PasswordField fx:id="password" layoutX="89.0" layoutY="45.0" onKeyPressed="#onEnter" prefHeight="25.0" prefWidth="150.0" promptText="password" />
                         <Button layoutY="90.0" mnemonicParsing="false" onAction="#buttonLogin" prefHeight="25.0" prefWidth="238.0" text="Log In" />
-                        <Hyperlink fx:id="linkRegistration" alignment="CENTER_RIGHT" layoutX="110.0" layoutY="135.0" onAction="#processRegistration" prefHeight="25.0" prefWidth="128.0" text="New Staff? Register" textAlignment="CENTER" />
+                        <Hyperlink alignment="CENTER_RIGHT" layoutX="110.0" layoutY="135.0" onAction="#processRegistration" prefHeight="25.0" prefWidth="128.0" text="New Staff? Register" textAlignment="CENTER" />
                      </children>
                      <HBox.margin>
                         <Insets top="5.0" />
