@@ -42,7 +42,7 @@ public class RegistrationController implements Initializable
     private TextField affiliation;
 
     @FXML
-    private TextField category;
+    private ComboBox<String> chooseCategory;
     
     @FXML
     private TextField emailAddress;
@@ -54,10 +54,10 @@ public class RegistrationController implements Initializable
     private TextField lastName;
     
     @FXML
-    private TextField password;
+    private PasswordField password;
     
     @FXML
-    private TextField confirmPassword;
+    private PasswordField confirmPassword;
 
     @FXML
     private TextField phoneNumber;
@@ -86,9 +86,13 @@ public class RegistrationController implements Initializable
     public void initialize(URL url, ResourceBundle rb) {
         chooseStaffType.getItems().add("Administrative Staff");
         chooseStaffType.getItems().add("Medical Staff");
-        choosePositionType.getItems().add("Full Time");
-        choosePositionType.getItems().add("Part Time");
+        choosePositionType.getItems().add("FullTime");
+        choosePositionType.getItems().add("PartTime");
         choosePositionType.getItems().add("Volunteer");
+        
+        chooseCategory.getItems().add( "RegisteredNurse" );
+        chooseCategory.getItems().add( "GeneralPractitioner" );
+        chooseCategory.getItems().add( "Pharmacist" );
         
         choosePositionType.setVisible(false);
         medicalPane.setVisible(false);
@@ -158,7 +162,7 @@ public class RegistrationController implements Initializable
                 case "Medical Staff" 
                         -> Main.addStaff( new MedicalStaff( firstName.getText(), lastName.getText(), phoneNumber.getText(), emailAddress.getText(),
                                     username.getText(), password.getText(), streetAddress.getText(), suburb.getText(), state.getText(),
-                                    registrationID.getText(), affiliation.getText(), category.getText() ));
+                                    registrationID.getText(), affiliation.getText(), chooseCategory.getSelectionModel().getSelectedItem() ));
             }
             registrationSuccess();
         }

@@ -57,7 +57,7 @@
                            <children>
                               <TextField fx:id="registrationID" prefHeight="25.0" prefWidth="320.0" promptText="registration id" />
                               <TextField fx:id="affiliation" layoutY="40.0" prefHeight="25.0" prefWidth="320.0" promptText="affiliation" />
-                              <TextField fx:id="category" layoutY="80.0" prefHeight="25.0" prefWidth="320.0" promptText="category" />
+                              <ComboBox fx:id="chooseCategory" layoutY="80.0" prefHeight="30.0" prefWidth="320.0" promptText="category" />
                            </children>
                         </Pane>
                         <Pane fx:id="contactPane" layoutY="395.0">
