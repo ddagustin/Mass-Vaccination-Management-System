@@ -3,7 +3,10 @@ package mvms.controllers;
 import entities.*;
 import mvms.*;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,6 +25,7 @@ public class SettingsController implements Initializable
     // initialise unique variables to this class
     private Staff currentUser;
     private int currentUserIndex;
+    private String alertString;
     
     @FXML
     private TextField affiliation;
@@ -78,9 +82,6 @@ public class SettingsController implements Initializable
     private Pane passwordPane;
     
     @FXML
-    private Label staffID;
-    
-    @FXML
     private Button buttonChangePassword;
     
     @FXML
@@ -120,14 +121,21 @@ public class SettingsController implements Initializable
                 currentUser.setStreetAddress( streetAddress.getText() );
                 currentUser.setSuburbAddress( suburb.getText() );
                 currentUser.setStateAddress( state.getText() );
+                
+                // update the database
+                Main.dbUtil.updateStaff(currentUser, currentUserIndex);
+                System.out.println("Successfully updated staff record");
             
-                Main.setStaff( currentUserIndex, currentUser );
+                Main.refreshStaffList();
             
                 setUserDetails( currentUser, false );
                 buttonChangeDetails.setText( "Update Details" );
             }
             catch( IllegalArgumentException ex ) {
                 showError();
+            }
+            catch (SQLException ex) {
+                Logger.getLogger(SettingsController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         
@@ -145,13 +153,19 @@ public class SettingsController implements Initializable
         else {
             try {
                 passwordStringCheck();
+                // remove the old username and password from the authenticator so it cannot be used again
                 Authenticator.removeCredentials(currentUser);
                 
                 currentUser.setUsername( username.getText() );
                 currentUser.setPassword( password.getText() );
-            
-                Main.setStaff( currentUserIndex, currentUser );
-            
+                
+                // update the database
+                Main.dbUtil.updateStaffPassword(currentUser, currentUserIndex);
+                System.out.println("Successfully updated staff credentials");
+                
+                Main.refreshStaffList();
+                
+                // add the new username and password into the authenticator
                 Authenticator.loadCredentials(currentUser);
             
                 setUsername( currentUser, false );
@@ -160,6 +174,9 @@ public class SettingsController implements Initializable
             catch( IllegalArgumentException ex )
             {
                 showError();
+            }
+            catch (SQLException ex) {
+                Logger.getLogger(SettingsController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -183,7 +200,7 @@ public class SettingsController implements Initializable
     // to populate fields using the current logged in staff information
     public void setLoggedUser() {
         currentUser = Main.getLoggedUser();
-        currentUserIndex = Main.getStaff().indexOf( currentUser );
+        currentUserIndex = currentUser.getStaffID();
         
         setUserDetails( currentUser, false );
         setUsername( currentUser, false );
@@ -215,7 +232,6 @@ public class SettingsController implements Initializable
         state.setText( user.getStateAddress() );
         emailAddress.setText( user.getEmailAddress() );
         phoneNumber.setText( user.getPhoneNumber() );
-        staffID.setText( user.getStaffID() );
         
         // editable fields
         firstName.setEditable(mode);
@@ -246,7 +262,7 @@ public class SettingsController implements Initializable
     }
     
     /*
-        validates basic user details using Operations.valdateFields method
+        validates basic user details using individual checks.
         additional validation on some fields:
         - firstName and lastName should have no digits
         - phoneNumber should be 10 digits long
@@ -254,37 +270,67 @@ public class SettingsController implements Initializable
     */ 
     private void userStringCheck()
     {
-        if( Operations.validateFields( detailsPane ) ) {
-            if( !firstName.getText().matches(".*\\d.*") && !lastName.getText().matches(".*\\d.*") && phoneNumber.getText().matches( "^\\d{10}$" ) && emailAddress.getText().matches( "^(.+)@(.+)$" ) ) {
-                return;
-            }
-        }
-        throw new IllegalArgumentException( "One of the input fields have an invalid argument." );
+        alertString = "Please check if all required fields are entered correctly.";
+        
+        if(firstName.getText().isBlank())
+            alertString = alertString.concat("\n- First name field is blank");
+        else if(firstName.getText().matches(".*\\d.*"))
+            alertString = alertString.concat("\n- First name has invalid characters");
+        
+        if(lastName.getText().isBlank())
+            alertString = alertString.concat("\n- Last name field is blank");
+        else if(lastName.getText().matches(".*\\d.*"))
+            alertString = alertString.concat("\n- Last name has invalid characters");
+        
+        if(phoneNumber.getText().isBlank())
+            alertString = alertString.concat("\n- Phone number field is blank");
+        else if(!phoneNumber.getText().matches("^\\d{10}$"))
+            alertString = alertString.concat("\n- Phone number should be 10 digits");
+        
+        if(emailAddress.getText().isBlank())
+            alertString = alertString.concat("\n- Email address field is blank");
+        else if(!emailAddress.getText().matches("^(.+)@(.+)$"))
+            alertString = alertString.concat("\n- Emailaddress should be in email@email.com format");
+        
+        if(!alertString.equalsIgnoreCase("Please check if all required fields are entered correctly."))
+            throw new IllegalArgumentException( "One of the input fields have an invalid argument." );
     }
     
     /*
-        validates basic user details using Operations.valdateFields method
+        validates basic user details using individual checks
         additional validation on some fields:
         - passwords should match
         - username should be unique
     */ 
     private void passwordStringCheck()
     {
-        if( Operations.validateFields( passwordPane ) ) {
-            if( !Authenticator.usernameExists( username.getText() ) ) {
-                if( password.getText().equals(confirmPassword.getText()) )
-                    return;
-            }
+        alertString = "Please check if all required fields are entered correctly.";
+        
+        if(username.getText().isBlank())
+            alertString = alertString.concat("\n- Username field is blank");
+        else if(Authenticator.usernameExists(username.getText())) {
+            if(!currentUser.getUsername().equals(username.getText()))
+                alertString = alertString.concat("\n- Username already exists!");
         }
-        throw new IllegalArgumentException( "One of the input fields have an invalid argument." );
+            
+        if(password.getText().isBlank())
+            alertString = alertString.concat("\n- Passsword field is blank");
+        if(confirmPassword.getText().isBlank())
+            alertString = alertString.concat("\n- Confirm passsword field is blank");
+        else if(!password.getText().equals(confirmPassword.getText())) {
+            alertString = alertString.concat("\n- Passwords don't match!");
+        }
+        
+        if(!alertString.equalsIgnoreCase("Please check if all required fields are entered correctly."))
+            throw new IllegalArgumentException( "One of the input fields have an invalid argument." );
     }
     
     // error showing when the input fields have something wrong with the inputs
-    private static void showError() {
+    private void showError() {
         Alert alert = new Alert( Alert.AlertType.WARNING );
-        alert.setTitle( "One or more fields have a problem" );
-        alert.setHeaderText( "Please check input fields" );
-        alert.setContentText( "Please check all blanks or invalid field inputs." );
+        alert.setTitle( "Problem with the changed fields" );
+        alert.setHeaderText( "Some fields have invalid inputs." );
+        alert.setContentText( alertString );
         alert.showAndWait();
     }
     

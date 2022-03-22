@@ -44,7 +44,7 @@
                         <Insets />
                      </opaqueInsets>
                   </ComboBox>
-                  <DatePicker fx:id="comboBirthday" layoutX="180.0" layoutY="80.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" promptText="birthday" />
+                  <DatePicker fx:id="comboBirthday" editable="false" layoutX="180.0" layoutY="80.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" promptText="birthday" />
                   <TextField fx:id="phoneNumber" layoutY="135.0" prefHeight="25.0" prefWidth="200.0" promptText="phone number" />
                   <TextField fx:id="emailAddress" layoutY="175.0" prefWidth="200.0" promptText="email address" />
                </children>
@@ -54,9 +54,8 @@
             <Pane fx:id="paneDose1" layoutY="240.0" prefHeight="180.0" prefWidth="150.0">
                <children>
                   <Label prefHeight="25.0" text="Vaccine Dose 1" />
-                  <DatePicker fx:id="doseDate1" layoutY="80.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" promptText="dose date 1" />
+                  <DatePicker fx:id="doseDate1" editable="false" layoutY="80.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" promptText="dose date 1" />
                   <ComboBox fx:id="comboDose1" layoutY="40.0" prefWidth="150.0" promptText="Vaccine" />
-                  <Label fx:id="doseID1" alignment="CENTER" layoutX="80.0" prefHeight="25.0" prefWidth="70.0" text="----------" />
                   <CheckBox fx:id="confirmedDose1" layoutY="150.0" mnemonicParsing="false" text="Confirm" />
                   <Label layoutY="120.0" prefHeight="25.0" text="confirmed by:" />
                   <Label fx:id="administeredBy1" alignment="CENTER" layoutX="70.0" layoutY="120.0" prefHeight="25.0" prefWidth="80.0" text="-----" />
@@ -65,20 +64,19 @@
             <Pane fx:id="paneDose2" layoutX="180.0" layoutY="240.0" prefHeight="180.0" prefWidth="150.0">
                <children>
                   <Label prefHeight="25.0" text="Vaccine Dose 2" />
-                  <DatePicker fx:id="doseDate2" layoutY="80.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" promptText="dose date 2" />
+                  <DatePicker fx:id="doseDate2" disable="true" editable="false" layoutY="80.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="150.0" promptText="dose date 2" styleClass="date-picker" />
                   <ComboBox fx:id="comboDose2" layoutY="40.0" prefWidth="150.0" promptText="Vaccine" />
-                  <Label fx:id="doseID2" alignment="CENTER" layoutX="80.0" prefHeight="25.0" prefWidth="70.0" text="----------" />
                   <CheckBox fx:id="confirmedDose2" layoutY="150.0" mnemonicParsing="false" text="Confirm" />
                   <Label layoutY="120.0" prefHeight="25.0" text="confirmed by:" />
                   <Label fx:id="administeredBy2" alignment="CENTER" layoutX="70.0" layoutY="120.0" prefHeight="25.0" prefWidth="80.0" text="-----" />
                </children>
             </Pane>
-            <Button fx:id="buttonAddRecord" layoutY="420.0" mnemonicParsing="false" onAction="#saveRecord" prefHeight="25.0" prefWidth="330.0" text="Add Record" />
-            <Button fx:id="buttonDeleteRecord" layoutY="460.0" mnemonicParsing="false" onAction="#deleteRecord" prefHeight="25.0" prefWidth="330.0" styleClass="button-obscure" text="Delete Record" />
+            <Button fx:id="buttonAddRecord" layoutY="460.0" mnemonicParsing="false" onAction="#saveRecord" prefHeight="25.0" prefWidth="330.0" text="Add Record" />
          </children>
       </Pane>
-      <ListView fx:id="listView" layoutX="390.0" layoutY="105.0" onMouseClicked="#selectRecipient" prefHeight="430.0" prefWidth="280.0" />
-      <TextField fx:id="search" layoutX="390.0" layoutY="70.0" prefWidth="280.0" promptText="search" />
+      <ListView fx:id="listView" layoutX="390.0" layoutY="135.0" onMouseClicked="#selectRecipient" prefHeight="400.0" prefWidth="280.0" />
+      <TextField fx:id="search" layoutX="390.0" layoutY="100.0" prefWidth="280.0" promptText="search" />
       <Button layoutX="390.0" layoutY="550.0" mnemonicParsing="false" onAction="#clearSelection" prefHeight="25.0" prefWidth="280.0" styleClass="button-obscure" text="Clear Selection" />
+      <DatePicker fx:id="vaccDate" editable="false" layoutX="390.0" layoutY="70.0" maxHeight="25.0" minHeight="25.0" prefWidth="280.0" promptText="select date" />
    </children>
 </AnchorPane>

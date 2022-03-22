@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 
 /**
  * Assessment 1: Mass Vaccination Management System
@@ -27,6 +28,12 @@ public class LoginController implements Initializable
     
     @FXML
     private TextField username;
+    
+    @FXML
+    private Label labelNoUser;
+    
+    @FXML
+    private HBox fieldHBox;
     
     // FXML methods
     @FXML
@@ -51,12 +58,18 @@ public class LoginController implements Initializable
      */
     public void initialize(URL url, ResourceBundle rb)
     {
-        // nothing to do
+        
     }
     
     // setApp to cast Main class into this class for easy access
     public void setApp(Main application){
         this.application = application;
+        if(!Main.noUser){
+            labelNoUser.setVisible(false);
+            labelNoUser.setText("");
+            //application.getStage().setMaxHeight(395);
+            fieldHBox.setMaxHeight(0);
+        }
     }
     
     // error showing when credentials are not valid

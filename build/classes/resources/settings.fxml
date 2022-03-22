@@ -47,7 +47,7 @@
       </Pane>
       <Pane layoutX="360.0" layoutY="10.0" prefHeight="245.0" prefWidth="320.0">
          <children>
-            <Pane fx:id="medicalPane" layoutY="125.0">
+            <Pane fx:id="medicalPane" layoutY="80.0">
                <children>
                   <TextField fx:id="registrationID" editable="false" prefHeight="25.0" prefWidth="320.0" promptText="registration id" />
                   <TextField fx:id="affiliation" editable="false" layoutY="40.0" prefHeight="25.0" prefWidth="320.0" promptText="affiliation" />
@@ -59,10 +59,8 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="staffType" editable="false" layoutY="85.0" prefHeight="25.0" prefWidth="320.0" promptText="staff type" />
-            <TextField fx:id="positionType" editable="false" layoutY="125.0" prefHeight="25.0" prefWidth="320.0" promptText="position type" />
-            <Label layoutY="45.0" prefHeight="25.0" text="Staff ID:" />
-            <Label fx:id="staffID" layoutX="75.0" layoutY="45.0" prefHeight="25.0" text="- - - - -" />
+            <TextField fx:id="staffType" editable="false" layoutY="40.0" prefHeight="25.0" prefWidth="320.0" promptText="staff type" />
+            <TextField fx:id="positionType" editable="false" layoutY="80.0" prefHeight="25.0" prefWidth="320.0" promptText="position type" />
          </children>
       </Pane>
       <Separator layoutX="250.0" layoutY="345.0" prefWidth="200.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" />

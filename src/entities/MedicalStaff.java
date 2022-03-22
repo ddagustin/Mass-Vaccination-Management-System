@@ -112,7 +112,7 @@ public class MedicalStaff extends Staff
             this.category = Category.valueOf(category);
         }
         catch( IllegalArgumentException ex ) {
-            //this.category = Category.Unspecified;
+            this.category = Category.Unspecified;
         }
     }
     
@@ -123,7 +123,7 @@ public class MedicalStaff extends Staff
      */
     @Override
     public String toString() {
-        return String.format( "%s%s\n%s\n%s\n%s\n",
+        return String.format( "%s%s\nCategory: %s\nRegistration: %s\nAffiliation: %s\n",
                 "Medical ", super.toString(),
                 getCategory(),
                 getRegistrationNumber(),

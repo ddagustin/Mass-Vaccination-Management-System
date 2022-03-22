@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="415.0" maxWidth="380.0" minHeight="393.0" minWidth="380.0" prefHeight="393.0" prefWidth="380.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvms.controllers.LoginController">
+<AnchorPane maxHeight="450.0" maxWidth="380.0" minHeight="395.0" minWidth="380.0" prefHeight="450.0" prefWidth="380.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvms.controllers.LoginController">
    <children>
       <VBox alignment="CENTER" maxHeight="415.0" maxWidth="380.0" minHeight="415.0" minWidth="380.0" prefHeight="415.0" prefWidth="380.0" scaleShape="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -21,14 +21,14 @@
                <children>
                   <ImageView fx:id="logLogoImg" fitHeight="185.0" fitWidth="139.0" nodeOrientation="INHERIT" preserveRatio="true">
                      <image>
-                        <Image url="@png/qld.png" />
+                        <Image url="@png/vacc.png" />
                      </image>
                   </ImageView>
                </children>
             </HBox>
-            <HBox alignment="CENTER" minHeight="180.0" prefHeight="180.0" prefWidth="380.0">
+            <HBox fx:id="fieldHBox" alignment="CENTER" minHeight="180.0" prefWidth="380.0">
                <children>
-                  <Pane prefHeight="169.0" prefWidth="238.0">
+                  <Pane prefWidth="238.0">
                      <children>
                         <Label layoutX="4.0" prefHeight="25.0" prefWidth="85.0" text="Username" />
                         <TextField fx:id="username" layoutX="89.0" onKeyPressed="#onEnter" prefHeight="25.0" prefWidth="150.0" promptText="username">
@@ -39,6 +39,7 @@
                         <PasswordField fx:id="password" layoutX="89.0" layoutY="45.0" onKeyPressed="#onEnter" prefHeight="25.0" prefWidth="150.0" promptText="password" />
                         <Button layoutY="90.0" mnemonicParsing="false" onAction="#buttonLogin" prefHeight="25.0" prefWidth="238.0" text="Log In" />
                         <Hyperlink alignment="CENTER_RIGHT" layoutX="110.0" layoutY="135.0" onAction="#processRegistration" prefHeight="25.0" prefWidth="128.0" text="New Staff? Register" textAlignment="CENTER" />
+                        <Label fx:id="labelNoUser" layoutY="166.0" prefHeight="50.0" prefWidth="238.0" text="No user detected! Please register by clicking on the &quot;New Staff? Register&quot; link." textAlignment="CENTER" wrapText="true" />
                      </children>
                      <HBox.margin>
                         <Insets top="5.0" />

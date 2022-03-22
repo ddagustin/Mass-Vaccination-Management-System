@@ -9,7 +9,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.TextAlignment;
 
 /**
  * Assessment 1: Mass Vaccination Management System
@@ -29,6 +31,9 @@ public class MainController implements Initializable
     
     @FXML
     public AnchorPane mainPane;
+    
+    @FXML
+    private Label loggedInAs;
 
     // handles going back to the login page
     @FXML
@@ -48,6 +53,13 @@ public class MainController implements Initializable
     {
         gotoAccountSettings();
     }
+    
+    // handles right pane switching to reports view
+    @FXML
+    void showReports(ActionEvent event) throws Exception
+    {
+        gotoReports();
+    }
 
     /**
      * Initializes the controller class.
@@ -56,6 +68,9 @@ public class MainController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
+        loggedInAs.setText(Main.getLoggedUser().getClass().getSimpleName());
+        loggedInAs.setTextAlignment(TextAlignment.CENTER);
+        
         try {
             gotoVaccRecipient();
         }
@@ -89,5 +104,14 @@ public class MainController implements Initializable
         SettingsController settings = loader.getController();
         
         settings.setLoggedUser();
+    }
+    
+    // handles scene replacement and controller management - adds all children of settings fxml to the right pane
+    public void gotoReports() throws Exception
+    {
+        FXMLLoader loader = new FXMLLoader( getClass().getResource("/resources/reports.fxml"));
+        mainPane.getChildren().setAll((AnchorPane) loader.load());
+        
+        ReportsController reports = loader.getController();
     }
 }

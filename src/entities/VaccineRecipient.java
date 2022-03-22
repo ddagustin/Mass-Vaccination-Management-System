@@ -16,11 +16,8 @@ public class VaccineRecipient extends Person
     private LocalDate dateOfBirth;
     private Vaccine[] vaccineDoses = new Vaccine[2];
     private Gender gender;
-    private final String RECIPIENTID;
+    private int recipientID = 0;
     private int doseCount = 0;
-    
-    // recipient count static variable to help in generating RECIPIENTID
-    private static int recipientCount = 0;
     
     // Gender is final - added 'unspecified' type as default value
     public enum Gender {
@@ -44,9 +41,6 @@ public class VaccineRecipient extends Person
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
         
-        // generate RECIPIENTID as a 5 character string from recipientCount
-        this.RECIPIENTID = String.format("%05d", getRecipientCount());
-        
         // set default doses
         this.SETFIRSTVACCDOSE( new Vaccine() );
         this.SETSECONDVACCDOSE( new Vaccine() );
@@ -66,9 +60,6 @@ public class VaccineRecipient extends Person
             this.gender = Gender.Unspecified;
         }
         
-        // generate RECIPIENTID as a 5 character string from recipientCount
-        this.RECIPIENTID = String.format("%05d", getRecipientCount());
-        
         // set default doses
         this.SETFIRSTVACCDOSE( new Vaccine() );
         this.SETSECONDVACCDOSE( new Vaccine() );
@@ -80,9 +71,6 @@ public class VaccineRecipient extends Person
         super();
         this.dateOfBirth = LocalDate.now();
         this.gender = Gender.Unspecified;
-        
-        // generate RECIPIENTID as a 5 character string from recipientCount
-        this.RECIPIENTID = "undefined";
         
         // set default doses
         this.SETFIRSTVACCDOSE( new Vaccine() );
@@ -117,14 +105,10 @@ public class VaccineRecipient extends Person
         return vaccineDoses[1];
     }
 
-    public String getRECIPIENTID() {
-        return RECIPIENTID;
+    public int getRecipientID() {
+        return recipientID;
     }
 
-    public static int getRecipientCount() {
-        return recipientCount;
-    }
-    
     public int getDoseCount() {
         return doseCount;
     }
@@ -133,6 +117,10 @@ public class VaccineRecipient extends Person
      * Set methods
      *      enables the modification of the class variables
      */
+    
+    public void setRecipientID(int recipientID) {
+        this.recipientID = recipientID;
+    }
     
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
@@ -183,9 +171,9 @@ public class VaccineRecipient extends Person
      */
     @Override
     public String toString() {
-        return String.format( "%s\n%s\n%s\n%s\n%s\n\n%s\n%s%s%s%s",
+        return String.format( "%s %s\n%s\nGender: %s\nDate of Birth: %s\n\n%s\n%s%s%s%s",
                 "Recipient Details:",
-                getRECIPIENTID(),
+                getRecipientID(),
                 super.toString(),
                 getGender(),
                 getDateOfBirth(),

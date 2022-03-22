@@ -51,4 +51,13 @@ public class Authenticator
         CREDENTIALS.remove( username );
     }
     
+    // returns the currentStaff if it exists
+    public static Staff getUser(String username) {
+        for(Staff currentStaff : Main.getStaff())
+        {
+            if(currentStaff.getUsername().equals(username))
+                return currentStaff;
+        }
+        return null;
+    }
 }

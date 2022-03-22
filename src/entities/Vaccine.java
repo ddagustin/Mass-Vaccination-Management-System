@@ -4,16 +4,13 @@ package entities;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.UUID;
 
 /**
  * Assessment 1: Mass Vaccination Management System
  *      Vaccine class contains all data and functions related to the vaccines
  *      stores vaccine dose name, scheduled/confirmed date, status (if already confirmed), and 
  *          the medical staff who administered the vaccine
- *      also stores a unique vaccineID
- *          - used the UUID generation method in java to generate a unique value0
- * 
+ *      
  * @author DAgustin
  * 03 Dec 2021
  */
@@ -21,10 +18,10 @@ public class Vaccine implements Serializable
 {
     // initialise unique variables to this class
     private LocalDate vaccinationDate;
-    private String vaccineID;
+    private int vaccineID = 0;
     private VaccineType vaccineName;
     private boolean status = false;
-    private String administeredBy = "";
+    private int administeredBy;
     
     // VaccineType is final - added 'None' type as default value
     public enum VaccineType {
@@ -41,7 +38,6 @@ public class Vaccine implements Serializable
     public Vaccine(VaccineType vaccineName, LocalDate vaccinationDate) {
         this.vaccinationDate = vaccinationDate;
         this.vaccineName = vaccineName;
-        this.vaccineID = ( vaccineName.toString().substring(0,1) + UUID.randomUUID().toString().substring(0,8) ).toUpperCase();
     }
     
     public Vaccine( String vaccineName, String vaccinationDate ) {
@@ -58,9 +54,6 @@ public class Vaccine implements Serializable
         catch( DateTimeParseException dtex ) {
             this.vaccinationDate = LocalDate.now();
         }
-        
-        // generate vaccineID
-        this.vaccineID = ( vaccineName.substring(0,1) + UUID.randomUUID().toString().substring(0,8) ).toUpperCase();
     }
     
     public Vaccine( String vaccineName, LocalDate vaccinationDate ) {
@@ -74,15 +67,11 @@ public class Vaccine implements Serializable
         }
         
         this.vaccinationDate = vaccinationDate;
-        
-        // generate vaccineID
-        this.vaccineID = ( vaccineName.substring(0,1) + UUID.randomUUID().toString().substring(0,8) ).toUpperCase();
     }
     
     // default constructor
     public Vaccine() {
-        this( VaccineType.None, LocalDate.now() );
-        this.vaccineID = "undefined";
+        this( VaccineType.None, LocalDate.now().plusDays(30) );
     }
 
     /**
@@ -96,19 +85,19 @@ public class Vaccine implements Serializable
         return vaccinationDate;
     }
 
-    public String getVaccineID() {
+    public int getVaccineID() {
         return vaccineID;
     }
     
-    public VaccineType getVaccineName() {
-        return vaccineName;
+    public String getVaccineName() {
+        return String.valueOf(vaccineName);
     }
     
     public boolean getStatus() {
         return status;
     }
     
-    public String getAdministeredBy() {
+    public int getAdministeredBy() {
         return administeredBy;
     }
 
@@ -121,7 +110,7 @@ public class Vaccine implements Serializable
         this.vaccinationDate = vaccinationDate;
     }
 
-    public void setVaccineID(String vaccineID) {
+    public void setVaccineID(int vaccineID) {
         this.vaccineID = vaccineID;
     }
 
@@ -148,7 +137,7 @@ public class Vaccine implements Serializable
             System.out.println( "Vaccine already confirmed" );
     }
     
-    public void setAdministeredBy( String administeredBy )
+    public void setAdministeredBy( int administeredBy )
     {
         // can only change status once
         if( status == false ) {
@@ -165,10 +154,10 @@ public class Vaccine implements Serializable
      */
     @Override
     public String toString() {
-        return String.format( "%s\n%s\n%s\n",
+        return String.format( "%s\nVaccination Date: %s\nAdministered By: %s\n",
                 getVaccineName(),
-                getVaccineID(),
-                getVaccinationDate()
+                getVaccinationDate(),
+                getAdministeredBy()
         );
     }
     

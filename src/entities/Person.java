@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @author DAgustin
  * 03 Dec 2021
  */
-public abstract class Person implements Serializable
+public abstract class Person
 {
     // initialise unique variables to this class
     private String firstName;
@@ -97,7 +97,7 @@ public abstract class Person implements Serializable
     @Override
     public String toString() {
         return String.format(
-                "%s %s\n%s\n%s",
+                "Name: %s %s\nPhone: %s\nEmail: %s",
                 getFirstName(), getLastName(),
                 getPhoneNumber(),
                 getEmailAddress()

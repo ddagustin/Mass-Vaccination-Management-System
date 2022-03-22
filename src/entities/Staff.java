@@ -16,10 +16,7 @@ public abstract class Staff extends Person
     private String streetAddress;
     private String suburbAddress;
     private String stateAddress;
-    private final String STAFFID; // 5 character long ID unique per instance of this class
-    
-    // staff count static variable to help in generating staffID
-    private static int staffCount = 0;
+    private int staffID = 0;
 
     /**
      * Parameterised constructors for the Staff class
@@ -42,10 +39,6 @@ public abstract class Staff extends Person
         this.streetAddress = streetAddress;
         this.suburbAddress = suburbAddress;
         this.stateAddress = stateAddress;
-        
-        // call static method to increase staff count and generate a unique staffID
-        Staff.incrementStaffCount();
-        this.STAFFID = String.format("%05d", getStaffCount());
     }
 
     // default constructor
@@ -56,7 +49,6 @@ public abstract class Staff extends Person
         this.streetAddress = "undefined";
         this.suburbAddress = "undefined";
         this.stateAddress = "undefined";
-        this.STAFFID = "undefined";
     }
 
     /**
@@ -86,14 +78,18 @@ public abstract class Staff extends Person
         return stateAddress;
     }
 
-    public String getStaffID() {
-        return STAFFID;
+    public int getStaffID() {
+        return staffID;
     }
 
     /**
      * Set methods
      *      enables the modification of the class variables
      */
+    
+    public void setStaffID(int staffID) {
+        this.staffID = staffID;
+    }
     
     public void setUsername(String username) {
         this.username = username;
@@ -122,19 +118,6 @@ public abstract class Staff extends Person
     }
     */
     
-    public static void setStaffCount(int staffCount) {
-        Staff.staffCount = staffCount;
-    }
-
-    // unique method to increment stafCount variable
-    public static void incrementStaffCount() {
-        staffCount += 1;
-    }
-    
-    // get the staffCount
-    public static int getStaffCount() {
-        return staffCount;
-    }
     
     /**
      * Overriden toString() method to display class in terminal
@@ -143,11 +126,10 @@ public abstract class Staff extends Person
      */
     @Override
     public String toString() {
-        return String.format( "%s\n%s\n%s, %s, %s\n%s\n%s",
-                "Staff Details:",
+        return String.format( "%s %s\n%s\nAddress: %s, %s, %s\nUsername: %s",
+                "Staff:", getStaffID(),
                 super.toString(),
                 getStreetAddress(), getSuburbAddress(), getStateAddress(),
-                getStaffID(),
                 getUsername());
     }
     
@@ -158,8 +140,8 @@ public abstract class Staff extends Person
      */
     @Override
     public String toCSV() {
-        return String.format( "%s,%s,%s,%s,%s,%s",
-                getStaffID(), super.toCSV(), getStreetAddress(), getSuburbAddress(), getStateAddress(), getUsername() );
+        return String.format( "%s,%s,%s,%s,%s,%s,%s",
+                getStaffID(), super.toCSV(), getStreetAddress(), getSuburbAddress(), getStateAddress(), getUsername(), getPassword() );
     }
     
 }

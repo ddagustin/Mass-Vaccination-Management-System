@@ -90,7 +90,7 @@ public class AdminStaff extends Staff
             this.positionType = PositionType.valueOf(positionType);
         }
         catch( IllegalArgumentException ex ) {
-            //this.positionType = PositionType.None;
+            this.positionType = PositionType.None;
         }
     }
     
@@ -101,7 +101,7 @@ public class AdminStaff extends Staff
      */
     @Override
     public String toString() {
-        return String.format( "%s%s\n%s\n",
+        return String.format( "%s%s\nPosition type: %s\n",
                 "Admin ", super.toString(),
                 getPositionType());
     }

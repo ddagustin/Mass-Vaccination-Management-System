@@ -1,19 +1,16 @@
 package mvms;
 
 import entities.*;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import mvms.controllers.*;
@@ -35,31 +32,20 @@ public class Main extends Application
     // initialise global variables
     private Stage stage;
     private static Staff LoggedUser;
+    public static boolean noUser = false;
     
     // arraylists containing the staff and recipients
-    private static List<Staff> staff = new ArrayList<>();
-    private static List<VaccineRecipient> vaccRecipient = new ArrayList<>();
+    private static LinkedList<Staff> staff = new LinkedList<>();
+    private static LinkedList<VaccineRecipient> vaccRecipient = new LinkedList<>();
+    
+    public static DatabaseUtility dbUtil;
     
     // main method
     public static void main( String[] args )
     {
+        dbUtil = new DatabaseUtility();
         launch( args );
         
-        // if saving fails, show in terminal that file was not saved
-        try {
-            // save arraylists to csv file before end of program
-            Operations.saveFile( staff, "staff.csv" );
-            Operations.saveFile( vaccRecipient, "vacc.csv" );
-            System.out.println( "saved csv files" );
-
-            // dump staff and vaccine recipient to tmp file
-            List<?> dump = Stream.of( staff, vaccRecipient ).flatMap( Collection::stream ).collect( Collectors.toList() );
-            Operations.dumpFile((List<Person>) dump);
-            System.out.println("saved dump");
-        }
-        catch( IOException ex ) {
-            System.out.println( "File not saved" );
-        }
     }
     
     // start the application
@@ -70,6 +56,7 @@ public class Main extends Application
             stage = primaryStage;
             stage.getIcons().add(new Image("/resources/png/qld icon.png"));
             stage.setTitle("Login - MVMS");
+            stage.setResizable(false);
             
             initLists();    // initialise staff and vaccRecipient arraylists
             
@@ -130,31 +117,21 @@ public class Main extends Application
     // initialise the staff and vacc recipient lists
     private static void initLists() {
         
-        // ensures to add one of each staff type in case the loading try block below fails
-        staff.add( new AdminStaff( "unspecified", "unspecified", "unspecified", "unspecified", "adminstaff", "password", "unspecified", "unspecified", "unspecified", "unspecified" ));
-        staff.add( new MedicalStaff( "unspecified", "unspecified", "unspecified", "unspecified", "medicalstaff", "password", "unspecified", "unspecified", "unspecified", "unspecified", "unspecified", "unspecified" ));
-        
         try {
-            // initialize -> staff and vaccine recipients into respective arraylists
-            staff = (List<Staff>) Operations.loadFile().get(0); 
-            vaccRecipient = (List<VaccineRecipient>) Operations.loadFile().get(1);
-        }
-        catch (IOException ex) {
+            staff = dbUtil.getStaffList();
+            vaccRecipient = dbUtil.getRecipientList();
             
-            noUserError();  // will not be shown due to the two staff added above
+            for(Staff s : staff) {
+                Authenticator.loadCredentials(s);
+            }
+                      
+            if(staff.isEmpty())
+                noUser = true;
         }
-        catch (ClassNotFoundException ex) {
+        catch (SQLException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    // if there is no dump file found in the files folder, show error.
-    private static void noUserError() {
-        Alert alert = new Alert( Alert.AlertType.WARNING );
-        alert.setTitle( "No user detected" );
-        alert.setHeaderText( "No user detected" );
-        alert.setContentText( "Please register for a new staff by clicking on the \"New Staff? Register\" link." );
-        alert.showAndWait();
+        
     }
     
     /**
@@ -196,47 +173,30 @@ public class Main extends Application
 
     public static void setLoggedUser(String username)
     {
-        Main.LoggedUser = Operations.getUser( username );
+        Main.LoggedUser = Authenticator.getUser( username );
     }
 
-    public static void setStaff(List<Staff> staff)
+    // method to refresh staff list from SQL database
+    public static void refreshStaffList()
     {
-        Main.staff = staff;
+        try {
+            Main.staff = dbUtil.getStaffList();
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
-    // overloaded method to accept setting staff at an index
-    public static void setStaff( int staffIndex, Staff staff )
+    // method to refresh recipient list from SQL database
+    public static void refreshRecipientList()
     {
-        Main.staff.set(staffIndex, staff);
+        try {
+            Main.vaccRecipient = dbUtil.getRecipientList();
+        }
+        catch(SQLException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
-    public static void setVaccRecipient(List<VaccineRecipient> vaccRecipient)
-    {
-        Main.vaccRecipient = vaccRecipient;
-    }
-    
-    // overloaded method to accept setting recipient at an index
-    public static void setVaccRecipient( int recipientIndex, VaccineRecipient vaccRecipient )
-    {
-        Main.vaccRecipient.set(recipientIndex, vaccRecipient);
-    }
-    
-    // method to add a new entry into the staff list
-    public static void addStaff( Staff staff )
-    {
-        Main.staff.add(staff);
-    }
-    
-    // method to add a new entry into the vaccRecipient list
-    public static void addVaccineRecipient( VaccineRecipient vaccRecipient )
-    {
-        Main.vaccRecipient.add(vaccRecipient);
-    }
-    
-    // method to remove a recipient
-    public static void removeVaccineRecipient( int recipientIndex )
-    {
-        Main.vaccRecipient.remove( recipientIndex );
-    }
     
 }

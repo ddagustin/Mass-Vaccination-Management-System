@@ -3,7 +3,10 @@ package mvms.controllers;
 import entities.*;
 import mvms.*;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,6 +25,7 @@ public class RegistrationController implements Initializable
     // initialise unique variables to this class
     private Main application;
     private String selectedStaffType;
+    private String alertString;
     
     @FXML
     private ComboBox<String> chooseStaffType;
@@ -97,7 +101,6 @@ public class RegistrationController implements Initializable
         choosePositionType.setVisible(false);
         medicalPane.setVisible(false);
         
-        contactPane.setLayoutY(230);
     }
     
     // handles going back to the login page
@@ -120,9 +123,14 @@ public class RegistrationController implements Initializable
         selectedStaffType = chooseStaffType.getSelectionModel().getSelectedItem();
         
         switch( selectedStaffType ) {
-            case "Administrative Staff" -> layoutAdmin();
-            case "Medical Staff" -> layoutMedical();
+            case "Administrative Staff":
+                layoutAdmin();
+                break;
+            case "Medical Staff":
+                layoutMedical();
+                break;
         }
+        
     }
     
     // handles setting Main class instance to this class for access
@@ -132,19 +140,16 @@ public class RegistrationController implements Initializable
     
     // layout of the window if selected staff type is AdminStaff
     private void layoutAdmin() {
-        choosePositionType.setVisible(true);
-        contactPane.setLayoutY(275);
-        
-        application.getStage().setHeight(875); 
+        choosePositionType.setVisible(true);        
+        //application.getStage().setHeight(400); 
     }
     
     // layout of the window if selected staff type is MedicalStaff
     private void layoutMedical() {
         medicalPane.setVisible(true);
-        medicalPane.setLayoutY(230);
-        contactPane.setLayoutY(345);
+        medicalPane.setLayoutY(160);
         
-        application.getStage().setHeight(945);
+        //application.getStage().setHeight(400);
     }
     
     // method to add staff into the Main.staff
@@ -155,20 +160,30 @@ public class RegistrationController implements Initializable
             checkFields();
             Authenticator.loadCredentials( username.getText(), password.getText() );
             switch( selectedStaffType ) {
-                case "Administrative Staff" 
-                        -> Main.addStaff( new AdminStaff( firstName.getText(), lastName.getText(), phoneNumber.getText(), emailAddress.getText(),
+                case "Administrative Staff":
+                    AdminStaff adminStaff = new AdminStaff(firstName.getText(), lastName.getText(), phoneNumber.getText(), emailAddress.getText(),
                                     username.getText(), password.getText(), streetAddress.getText(), suburb.getText(), state.getText(),
-                                    choosePositionType.getSelectionModel().getSelectedItem() ));
-                case "Medical Staff" 
-                        -> Main.addStaff( new MedicalStaff( firstName.getText(), lastName.getText(), phoneNumber.getText(), emailAddress.getText(),
+                                    choosePositionType.getSelectionModel().getSelectedItem());
+                    Main.dbUtil.addAdminStaff(adminStaff);
+                    Main.refreshStaffList();
+                    break;
+                case "Medical Staff":
+                    MedicalStaff medStaff = new MedicalStaff(firstName.getText(), lastName.getText(), phoneNumber.getText(), emailAddress.getText(),
                                     username.getText(), password.getText(), streetAddress.getText(), suburb.getText(), state.getText(),
-                                    registrationID.getText(), affiliation.getText(), chooseCategory.getSelectionModel().getSelectedItem() ));
+                                    registrationID.getText(), affiliation.getText(), chooseCategory.getSelectionModel().getSelectedItem());
+                    Main.dbUtil.addMedicalStaff(medStaff);
+                    Main.refreshStaffList();
+                    break;
             }
             registrationSuccess();
         }
-        catch( IllegalArgumentException ex ) {
+        catch (SQLException ex) {
+            Logger.getLogger(RegistrationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch (IllegalArgumentException ex1) {
             registrationError();
         }
+        
     }
     
     /*
@@ -181,36 +196,74 @@ public class RegistrationController implements Initializable
     */
     private void checkFields()
     {
+        alertString = "Please check if all required fields are entered correctly.";
         selectedStaffType = chooseStaffType.getSelectionModel().getSelectedItem();
         
-        if( selectedStaffType != null ) {
-            if( Operations.validateFields( detailsPane ) ) {
-                if( !firstName.getText().matches(".*\\d.*") && !lastName.getText().matches(".*\\d.*") && phoneNumber.getText().matches( "^\\d{10}$" ) && emailAddress.getText().matches( "^(.+)@(.+)$" ) ) {
-                    if( !Authenticator.usernameExists( username.getText() ) ) {
-                        if( password.getText().equals( confirmPassword.getText() ) ) {
-                            if( selectedStaffType.equals( "Administrative Staff" )){
-                                if( choosePositionType.getSelectionModel().getSelectedItem() != null )
-                                    return;
-                            }
-                            else{
-                                if( Operations.validateFields( medicalPane ) )
-                                    return;
-                            }
-                        }
-                    }
-                }
-            }
+        if(selectedStaffType == null)
+            alertString = alertString.concat("\n- Please select a staff type");
+        else {
+            if(selectedStaffType.equals("Administrative Staff")) {
+                if(choosePositionType.getSelectionModel().getSelectedItem() == null)
+                    alertString = alertString.concat("\n- Choose a position type!");
+            } 
+            else if(selectedStaffType.equals("Medical Staff")) {
+                if(registrationID.getText().isBlank())
+                    alertString = alertString.concat("\n- Registration ID field is blank");
+                if(affiliation.getText().isBlank())
+                    alertString = alertString.concat("\n- Affiliation field is blank");
+                if(chooseCategory.getSelectionModel().getSelectedItem() == null)
+                    alertString = alertString.concat("\n- Category is not chosen");
+            }  
         }
         
-        throw new IllegalArgumentException( "One of the input fields have an invalid argument." );
+        if(firstName.getText().isBlank())
+            alertString = alertString.concat("\n- First name field is blank");
+        else if(firstName.getText().matches(".*\\d.*"))
+            alertString = alertString.concat("\n- First name has invalid characters");
+        
+        if(lastName.getText().isBlank())
+            alertString = alertString.concat("\n- Last name field is blank");
+        else if(lastName.getText().matches(".*\\d.*"))
+            alertString = alertString.concat("\n- Last name has invalid characters");
+        
+        if(streetAddress.getText().isBlank())
+            alertString = alertString.concat("\n- Street address field is blank");
+        if(suburb.getText().isBlank())
+            alertString = alertString.concat("\n- Suburb address field is blank");
+        if(state.getText().isBlank())
+            alertString = alertString.concat("\n- State address field is blank");
+        
+        if(phoneNumber.getText().isBlank())
+            alertString = alertString.concat("\n- Phone number field is blank");
+        else if(!phoneNumber.getText().matches("^\\d{10}$"))
+            alertString = alertString.concat("\n- Phone number should be 10 digits");
+        
+        if(emailAddress.getText().isBlank())
+            alertString = alertString.concat("\n- Email address field is blank");
+        else if(!emailAddress.getText().matches("^(.+)@(.+)$"))
+            alertString = alertString.concat("\n- Emailaddress should be in email@email.com format");
+        
+        if(username.getText().isBlank())
+            alertString = alertString.concat("\n- Username field is blank");
+        else if(Authenticator.usernameExists(username.getText()))
+            alertString = alertString.concat("\n- Username already exists!");
+        if(password.getText().isBlank())
+            alertString = alertString.concat("\n- Passsword field is blank");
+        if(confirmPassword.getText().isBlank())
+            alertString = alertString.concat("\n- Confirm passsword field is blank");
+        else if(!password.getText().equals(confirmPassword.getText()))
+            alertString = alertString.concat("\n- Passwords don't match!");
+        
+        if(!alertString.equalsIgnoreCase("Please check if all required fields are entered correctly."))
+            throw new IllegalArgumentException( "One of the input fields have an invalid argument." );
     }
     
     // error showing when the input fields have something wrong with the inputs
     private void registrationError() {
         Alert alert = new Alert( Alert.AlertType.WARNING );
-        alert.setTitle( "Some fields have invalid inputs" );
-        alert.setHeaderText( "Problem with fields" );
-        alert.setContentText( "Please check if all required fields are entered correctly." );
+        alert.setTitle( "Problem with Registration Form" );
+        alert.setHeaderText( "Some fields have invalid inputs." );
+        alert.setContentText(alertString);
         alert.showAndWait();
     }
     

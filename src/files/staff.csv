@@ -1,3 +1,6 @@
-AdminStaff,00001,unspecified,unspecified,unspecified,unspecified,unspecified,unspecified,unspecified,adminstaff,None
-MedicalStaff,00002,unspecified,unspecified,unspecified,unspecified,unspecified,unspecified,unspecified,medicalstaff,Unspecified,unspecified,unspecified
-AdminStaff,00003,Daniel,Agustin,0431133559,daniel@cqu.com,28 Viney,Gracemere,QLD,ddagustin,FullTime
+1,AdminStaff,Full,Time,999999999,default@gmail.com,not applicable,not applicable,not applicable,adminstaff-full,password,FullTime,,
+2,AdminStaff,Part,Time,999999999,default@gmail.com,not applicable,not applicable,not applicable,adminstaff-part,password,PartTime,,
+3,AdminStaff,Volunteer,Staff,999999999,default@gmail.com,not applicable,not applicable,not applicable,adminstaff-vol,password,Volunteer,,
+4,MedicalStaff,General,Practitioner,999999999,default@gmail.com,not applicable,not applicable,not applicable,medicalstaff-gp,password,not applicable,not applicable,GeneralPractitioner
+5,MedicalStaff,Registered,Nurse,999999999,default@gmail.com,not applicable,not applicable,not applicable,medicalstaff-rn,password,not applicable,not applicable,RegisteredNurse
+6,MedicalStaff,Pharmacist,Staff,999999999,default@gmail.com,not applicable,not applicable,not applicable,medicalstaff-p,password,not applicable,not applicable,Pharmacist

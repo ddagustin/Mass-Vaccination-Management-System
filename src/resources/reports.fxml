@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: #000;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mvms.controllers.ReportsController">
+   <children>
+      <Separator layoutX="360.0" layoutY="65.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <padding>
+            <Insets left="30.0" right="30.0" />
+         </padding>
+      </Separator>
+      <Label layoutX="40.0" layoutY="25.0" stylesheets="@style.css" text="Reports">
+         <font>
+            <Font size="27.0" />
+         </font>
+      </Label>
+      <Pane layoutX="30.0" layoutY="90.0" prefHeight="490.0" prefWidth="300.0" AnchorPane.bottomAnchor="20.0">
+         <children>
+            <Label layoutX="5.0" prefHeight="25.0" text="Query Criteria">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="selectReport" layoutY="40.0" onAction="#onSelectReport" prefWidth="300.0" promptText="vaccine recipient or staff" />
+            <TextField fx:id="nameCriteria" layoutY="80.0" prefWidth="300.0" promptText="search by name" />
+            <Pane fx:id="vaccinePane" layoutY="120.0">
+               <children>
+                  <DatePicker fx:id="vaccineDate" editable="false" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="300.0" promptText="vaccination date" />
+                  <RadioButton fx:id="checkAll" layoutX="5.0" layoutY="40.0" mnemonicParsing="false" text="show all matching date" textFill="WHITE" />
+                  <RadioButton fx:id="checkFirstDose" layoutX="5.0" layoutY="80.0" mnemonicParsing="false" text="show only matching first dose" textFill="WHITE" />
+                  <RadioButton fx:id="checkSecondDose" layoutX="5.0" layoutY="120.0" mnemonicParsing="false" text="show only matching second dose" textFill="WHITE" />
+               </children>
+            </Pane>
+            <Pane fx:id="staffPane" layoutY="120.0" prefHeight="73.0" prefWidth="300.0">
+               <children>
+                  <ComboBox fx:id="staffTypeCriteria" onAction="#onSelectStaffType" prefWidth="300.0" promptText="staff type" />
+                  <ComboBox fx:id="positionTypeCriteria" layoutY="40.0" prefWidth="300.0" promptText="position type" />
+                  <ComboBox fx:id="categoryCriteria" layoutY="40.0" prefWidth="300.0" promptText="category" />
+               </children>
+            </Pane>
+            <Separator layoutX="25.0" layoutY="415.0" prefWidth="250.0" />
+            <Button layoutY="430.0" maxHeight="25.0" minHeight="25.0" mnemonicParsing="false" onAction="#displaySearch" prefHeight="25.0" prefWidth="300.0" text="Display Search Results">
+               <padding>
+                  <Insets top="-1.5" />
+               </padding></Button>
+            <Label layoutX="47.0" layoutY="345.0" prefHeight="70.0" prefWidth="207.0" text="Note: Only the report type is required. If other fields are unspecified, the filter for that field will not be applied." textAlignment="JUSTIFY" wrapText="true">
+               <font>
+                  <Font name="System Italic" size="12.0" />
+               </font>
+            </Label>
+            <Button layoutY="465.0" maxHeight="25.0" minHeight="25.0" mnemonicParsing="false" onAction="#clearCriteria" prefHeight="25.0" prefWidth="300.0" styleClass="button-obscure" text="Clear Criteria" />
+         </children>
+      </Pane>
+      <ListView fx:id="results" layoutX="380.0" layoutY="90.0" prefHeight="490.0" prefWidth="287.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="30.0" />
+   </children>
+</AnchorPane>
